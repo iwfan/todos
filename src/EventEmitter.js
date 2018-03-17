@@ -83,7 +83,9 @@ proto.removeListener = function removeListener(evt, listener) {
     let index = this.indexOfListener(listeners, listener)
 
     // 删除指定的监听函数
-    listeners.splice(index >>> 0, 1)
+    if (index !== -1) {
+        listeners.splice(index, 1)
+    }
     return this
 }
 
