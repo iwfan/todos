@@ -33,10 +33,9 @@ proto.indexOfListener = function indexOfListener(listeners, listener) {
     let isWrapperObject = typeof listener === 'object'
     let index = listeners.length
     let item
-
     while (index--) {
         item = listeners[index]
-        if (item.listener === isWrapperObject ? listener.listener : listener) {
+        if (item.listener === (isWrapperObject ? listener.listener : listener)) {
             return index
         }
     }
@@ -114,4 +113,4 @@ proto.emit = function emit(evt, ...args) {
     return this.emitListener.apply(this, [evt].concat(args))
 }
 
-// export default EventEmitter
+export default EventEmitter
