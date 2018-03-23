@@ -4,7 +4,7 @@
   "description": "A Simple ToDo List by JavaScript",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d dist"
+    "build": "babel src/js -d dist/js"
   },
   "repository": "https://github.com/iwfan/ToDoList.git",
   "author": "wangfan <i.wangfan@foxmail.com>",
