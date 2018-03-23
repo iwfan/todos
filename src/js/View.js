@@ -1,4 +1,4 @@
-import EventEmitter from './EventEmitter.js'
+import EventEmitter from '../lib/EventEmitter.js'
 
 var View = function() {
     var emit = Object.create(EventEmitter.prototype)

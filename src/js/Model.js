@@ -1,4 +1,4 @@
-import EventEmit from './EventEmitter.js'
+import EventEmit from '../lib/EventEmitter.js'
 
 var Model = function() {
     var lists = ['代办1','代办2','代办3','代办4','代办5',]
