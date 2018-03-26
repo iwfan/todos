@@ -1,6 +1,8 @@
 import EventEmit from '../lib/EventEmitter.js'
+import '../../node_modules/leancloud-storage/dist/av-min.js'
 
 var Model = function() {
+    console.log(AV)
     var lists = ['代办1','代办2','代办3','代办4','代办5',]
     var emit = Object.create(EventEmit.prototype)
     var handler = {
