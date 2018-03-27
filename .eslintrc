@@ -7,6 +7,6 @@
         "node": true
     },
     "rules": {
-        "semi": ["warn", "never"]
+        "semi": ["off", "never"]
     }
 }
