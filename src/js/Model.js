@@ -9,8 +9,9 @@ var Model = function() {
     localStorage.setItem('debug', 'leancloud*');
 
     // create class
-    const Todo = AV.Object.extend('Todo');
-    const todoList
+    let Todo = AV.Object.extend('Todo');
+    let emit = Object.create(EventEmit.prototype)
+    let todoList
 
     // let todo = new Todo()
     // todo.set('title', "测试数据一")
@@ -31,20 +32,8 @@ var Model = function() {
     // })
     // console.log(AV)
 
-    let lists 
-
-    try {
-       lists = await fetchTodoData() 
-    } catch (error) {
-       lists = [] 
-    }
-
-    async function fetchTodoData() {
-        return await new AV.Query('Todo').find()
-    }
-
     var lists = ['代办1','代办2','代办3','代办4','代办5',]
-    var emit = Object.create(EventEmit.prototype)
+
     var handler = {
         get(target, key, receiver) {
             return Reflect.get(target, key, receiver)
