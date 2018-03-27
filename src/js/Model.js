@@ -30,7 +30,7 @@ var Model = function() {
     // .catch(function(e) {
 
     // })
-    // console.log(AV)
+    console.log(AV)
 
     var lists = ['代办1','代办2','代办3','代办4','代办5',]
 
