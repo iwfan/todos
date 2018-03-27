@@ -13,7 +13,7 @@ var Model = function() {
     let emit = Object.create(EventEmit.prototype)
     let todoList
 
-    // let todo = new Todo()
+    let todo = new Todo()
     // todo.set('title', "测试数据一")
     // todo.save()
     // .then(function(data) {
