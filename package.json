@@ -4,16 +4,23 @@
   "description": "A Simple ToDo List by JavaScript",
   "main": "index.js",
   "scripts": {
-    "build": "babel src/js -d dist/js"
+    "build": "babel src/js -d dist/js",
+    "lint": "eslint src/js/**"
   },
   "repository": "https://github.com/iwfan/ToDoList.git",
   "author": "wangfan <i.wangfan@foxmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-eslint": "^8.2.2",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "leancloud-realtime": "^3.5.7",
     "leancloud-storage": "^3.6.3"
   }
