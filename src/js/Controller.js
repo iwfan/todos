@@ -1,20 +1,19 @@
-var Controller = function(model, view) {
-
+const Controller = function Controller(model, view) {
     view.update(model.getLists())
 
-    model.on('add', function() {
+    model.on('add', () => {
         view.update(model.getLists())
     })
 
-    model.on('remove', function() {
+    model.on('remove', () => {
         view.update(model.getLists())
     })
 
-    view.on('add', function(data) {
+    view.on('add', (data) => {
         model.add(data)
     })
-    
-    view.on('remove', function(index) {
+
+    view.on('remove', (index) => {
         model.remove(index)
     })
 }

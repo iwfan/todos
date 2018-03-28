@@ -1,12 +1,37 @@
 {
     "parser": "babel-eslint",
     "extends": "airbnb-base",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "root": true,
     "env": {
         "es6": true,
-        "browser": true,
-        "node": true
+        "browser": true
+    },
+    "globals": {
+        "AV": false
     },
     "rules": {
-        "semi": ["off", "never"]
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "warn",
+            "never"
+        ],
+        "eol-last": [
+            "warn",
+            "never"
+        ]
     }
 }

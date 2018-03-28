@@ -1,8 +1,8 @@
 import EventEmitter from '../lib/EventEmitter.js'
 
-var View = function() {
-    var emit = Object.create(EventEmitter.prototype)
-    var element
+const View = function View() {
+    const emit = Object.create(EventEmitter.prototype)
+    let element
 
     return Object.assign(emit, {
         init(selector) {
@@ -16,14 +16,14 @@ var View = function() {
                 throw new Error('must be init')
             }
             element.innerHTML = ''
-            var tpl = document.createElement('template')
+            const tpl = document.createElement('template')
             if (lists && lists.length) {
-                for (let item in lists) {
-                   tpl.innerHTML += `<li class='list-item' data-id='${item}'><span>${lists[item]}</span><a>remove</a></li>` 
+                for (const item in lists) {
+                    tpl.innerHTML += `<li class='list-item' data-id='${item}'><span>${lists[item]}</span><a>remove</a></li>`
                 }
             }
             element.appendChild(tpl.content)
-        }
+        },
     })
 }
 
