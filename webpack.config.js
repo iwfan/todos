@@ -1,4 +1,7 @@
 const path = require('path')
+const UglifyJs = require('uglifyjs-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const env = process.env.NODE_ENV
 module.exports = {
@@ -16,6 +19,30 @@ module.exports = {
         port: '3143',
         compress: true,
     },
-    module: {},
-    plugins: [],
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                ],
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [
+                    'file-loader',
+                ],
+            },
+        ],
+    },
+    plugins: [
+        new CleanWebpackPlugin(['dist']),
+        new UglifyJs(),
+        new HtmlWebpackPlugin({
+            minify: { },
+            hash: true,
+            template: './src/index.html',
+        }),
+    ],
 }

@@ -32,6 +32,7 @@
         "eol-last": [
             "warn",
             "never"
-        ]
+        ],
+        "no-useless-escape": "off"
     }
 }
