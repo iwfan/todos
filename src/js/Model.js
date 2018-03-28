@@ -1,5 +1,5 @@
-import EventEmit from '../lib/EventEmitter.js'
-import '../../node_modules/leancloud-storage/dist/av-min.js'
+import AV from 'leancloud-storage'
+import EventEmit from '../lib/EventEmitter'
 
 const Model = function Model() {
     // init
@@ -42,7 +42,7 @@ const Model = function Model() {
             return Reflect.set(target, key, value, receiver)
         },
         apply(target, context, args) {
-            const result = Reflect.apply(...arguments)
+            const result = Reflect.apply([target, context, args])
             context.emit(target.name, args)
             return result
         },

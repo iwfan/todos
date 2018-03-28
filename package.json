@@ -4,7 +4,7 @@
   "description": "A Simple ToDo List by JavaScript",
   "main": "index.js",
   "scripts": {
-    "build": "babel src/js -d dist/js",
+    "build": "webpack",
     "lint:init": "eslint --init",
     "lint": "eslint src/js/**"
   },
@@ -17,7 +17,9 @@
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.9.0"
+    "eslint-plugin-import": "^2.9.0",
+    "webpack": "^4.3.0",
+    "webpack-cli": "^2.0.13"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",

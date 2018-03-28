@@ -1,4 +1,4 @@
-import EventEmitter from '../lib/EventEmitter.js'
+import EventEmitter from '../lib/EventEmitter'
 
 const View = function View() {
     const emit = Object.create(EventEmitter.prototype)
@@ -18,9 +18,11 @@ const View = function View() {
             element.innerHTML = ''
             const tpl = document.createElement('template')
             if (lists && lists.length) {
-                for (const item in lists) {
-                    tpl.innerHTML += `<li class='list-item' data-id='${item}'><span>${lists[item]}</span><a>remove</a></li>`
-                }
+                Object.keys(lists).forEach((k) => {
+                    if (Object.hasOwnProperty.call(lists, k)) {
+                        tpl.innerHTML += `<li class='list-item' data-id='${k}'><span>${lists[k]}</span><a>remove</a></li>`
+                    }
+                })
             }
             element.appendChild(tpl.content)
         },

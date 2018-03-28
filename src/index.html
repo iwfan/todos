@@ -46,31 +46,6 @@
         </ul>
     </div>
     <script type="module">
-        import Model from './src/js/Model.js'
-        import View from './src/js/View.js'
-        import Controller from './src/js/Controller.js'
-
-        var btn = document.querySelector('button')
-        var txt = document.querySelector('input')
-        var container = document.querySelector('.list-container')
-
-        var model = Model()
-        var view = View()
-        view.init('.list-container')
-        
-        btn.onclick = function() {
-            view.emit('add', txt.value)
-            txt.value = ''
-        }
-        
-        container.addEventListener('click', function(evt) {
-            var target = evt.target
-            if (target.tagName === 'A') {
-                view.emit('remove', target.parentNode.dataset.id)
-            }
-        })
-    
-        var controller = Controller(model, view)
-    </script>
+            </script>
 </body>
 </html>
