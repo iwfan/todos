@@ -2,12 +2,20 @@ const path = require('path')
 
 const env = process.env.NODE_ENV
 module.exports = {
-    entry: './src/index.js',
+    mode: env || 'development',
+    entry: {
+        index: './src/index.js',
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
+        filename: '[name][chunkhash].js',
     },
-    config: {
-        mode: env || 'development',
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        host: '127.0.0.1',
+        port: '3143',
+        compress: true,
     },
+    module: {},
+    plugins: [],
 }
