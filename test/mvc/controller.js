@@ -2,9 +2,17 @@ import $ from 'jquery'
 
 class Controller {
     constructor(options) {
-        Object.keys(options).forEach((key) => {
-            this[key] = options[key]
-        })
+        const defaultOptions = {
+            init: null,
+            element: null,
+            events: {},
+            model: {
+                data: [],
+            },
+            template: '',
+        }
+
+        Object.assign(this, defaultOptions, options)
 
         this.$element = $(this.element)
 
@@ -12,9 +20,16 @@ class Controller {
             this.init.call(this)
         }
 
+        if (this.template && this.model.data) {
+            this.render()
+        }
 
+        this.bindEvent()
+    }
+    bindEvent() {
+        if (Object.keys(this.events).length) {
+            this.events.forEach()
+        }
     }
 }
-
-
 export default Controller
