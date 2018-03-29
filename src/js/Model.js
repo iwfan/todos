@@ -42,16 +42,18 @@ const Model = function Model() {
             return Reflect.set(target, key, value, receiver)
         },
         apply(target, context, args) {
-            const result = Reflect.apply([target, context, args])
+            const result = Reflect.apply(target, context, args)
             context.emit(target.name, args)
             return result
         },
     }
     const API = {
-        add: new Proxy((data => lists.push(data)), handler),
-        remove: new Proxy(((index) => {
-            lists.splice(index, 1)
-        }), handler),
+        add: new Proxy(function add(data) {
+            return lists.push(data)
+        }, handler),
+        remove: new Proxy(function remove(index) {
+            return lists.splice(index, 1)
+        }, handler),
         getLists() {
             return lists
         },

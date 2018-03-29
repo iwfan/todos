@@ -1,3 +1,5 @@
+import 'babel-polyfill'
+import './css/index.css'
 import Model from './js/Model'
 import View from './js/View'
 import Controller from './js/Controller'
