@@ -7,15 +7,18 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const env = process.env.NODE_ENV
 module.exports = {
     mode: env || 'development',
+    // node: {
+    //     fs: 'empty',
+    // },
     entry: {
-        index: './src/index2.js',
+        index: './test/mvc/model.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name][chunkhash].js',
     },
     devServer: {
-        contentBase: path.resolve(__dirname, 'dist'),
+        contentBase: path.resolve(__dirname, ''),
         host: '127.0.0.1',
         port: '3143',
         compress: true,
@@ -49,8 +52,8 @@ module.exports = {
         // new UglifyJs(),
         new HtmlWebpackPlugin({
             minify: { },
-            hash: true,
-            template: './src/index.html',
+            // hash: true,
+            template: './test/mvc/index.html',
         }),
         new OpenBrowserPlugin({
             url: 'http://127.0.0.1:3143',

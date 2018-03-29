@@ -10,7 +10,8 @@
         "browser": true
     },
     "globals": {
-        "AV": false
+        "AV": false,
+        "template": false
     },
     "rules": {
         "indent": [
