@@ -1,64 +1,55 @@
-import AV from 'leancloud-storage'
-import EventEmit from '../lib/EventEmitter'
+// import AV from 'leancloud-storage'
 
-const Model = function Model() {
-    // init
-    const appId = 'pDAVsDD9SILklHldH52mAXoN-gzGzoHsz'
-    const appKey = 'R8grFdtFaI0vg3si8rubvmKL'
-    AV.init({ appId, appKey })
-    localStorage.setItem('debug', 'leancloud*')
+const Model = function Model(selector) {
+    // const appId = 'pDAVsDD9SILklHldH52mAXoN-gzGzoHsz'
+    // const appKey = 'R8grFdtFaI0vg3si8rubvmKL'
+    const getTpl = function getTpl() {
+        return `
+            <header>
+                <h1 class="title">{{title}}</h1>
+            </header>
+            <section class="input-container">
+                <input type="text" name="" id="todo_input"> <button id="add">submit</button>
+            </section>
+            <ul class="list-container">
+                {{each todos as value index}} 
+                    <li class='list-item'><span>{{value}}</span><a data-id={{index}} class="remove">remove</a></li>
+                {{/each}}
+            </ul>
+        `
+    }
 
-    // create class
-    // const Todo = AV.Object.extend('Todo')
-    const emit = Object.create(EventEmit.prototype)
-    // let todoList
+    const getTodos = function getTodos() {
+        return ['代办1', '代办2', '代办3']
+    }
 
-    // const todo = new Todo()
-    // todo.set('title', "测试数据一")
-    // todo.save()
-    // .then(function(data) {
-    //     console.log(data)
-    // }).catch(function(e) {
-
-    // })
-
-    // var query = new AV.Query('Todo')
-    // query.find()
-    // .then(function(data) {
-    //     console.log(data)
-    // })
-    // .catch(function(e) {
-
-    // })
-    console.log(AV)
-
-    const lists = ['代办1', '代办2', '代办3', '代办4', '代办5']
-
-    const handler = {
-        get(target, key, receiver) {
-            return Reflect.get(target, key, receiver)
+    return {
+        element: selector,
+        data: {
+            title: 'My Todo List',
+            todos: [],
         },
-        set(target, key, value, receiver) {
-            return Reflect.set(target, key, value, receiver)
+        template: getTpl,
+        events: {
+            'click button#add': 'addTodo',
+            'click a.remove': 'removeTodo',
         },
-        apply(target, context, args) {
-            const result = Reflect.apply(target, context, args)
-            context.emit(target.name, args)
-            return result
+        init() {
+            // AV.init({ appId, appKey })
+            // localStorage.setItem('debug', 'leancloud*')
+            this.data.todos = getTodos()
+        },
+        addTodo() {
+            const data = this.$element.find('#todo_input').val()
+            this.data.todos.push(data)
+            this.render()
+        },
+        removeTodo(event) {
+            const { target } = event
+            const index = target.dataset.id
+            this.data.todos.splice(index, 1)
+            this.render()
         },
     }
-    const API = {
-        add: new Proxy(function add(data) {
-            return lists.push(data)
-        }, handler),
-        remove: new Proxy(function remove(index) {
-            return lists.splice(index, 1)
-        }, handler),
-        getLists() {
-            return lists
-        },
-    }
-    return Object.assign(emit, API)
 }
-
 export default Model

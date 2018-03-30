@@ -10,8 +10,7 @@
         "browser": true
     },
     "globals": {
-        "AV": false,
-        "template": false
+
     },
     "rules": {
         "indent": [
@@ -33,6 +32,10 @@
         "eol-last": [
             "warn",
             "never"
+        ],
+        "arrow-parens": [
+            "error",
+            "as-needed"
         ],
         "no-useless-escape": "off"
     }

@@ -8,7 +8,7 @@ const env = process.env.NODE_ENV
 module.exports = {
     mode: env || 'development',
     entry: {
-        index: './test/mvc/model.js',
+        index: './src/todo.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -55,7 +55,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             minify: { },
             // hash: true,
-            template: './test/mvc/index.html',
+            template: './src/index.html',
         }),
         new OpenBrowserPlugin({
             url: 'http://127.0.0.1:3143',
