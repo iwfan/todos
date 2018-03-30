@@ -1,5 +1,5 @@
 const path = require('path')
-// const UglifyJs = require('uglifyjs-webpack-plugin')
+const UglifyJs = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const OpenBrowserPlugin = require('open-browser-webpack-plugin')
@@ -51,10 +51,10 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        // new UglifyJs(),
+        new UglifyJs(),
         new HtmlWebpackPlugin({
             minify: { },
-            // hash: true,
+            hash: true,
             template: './src/index.html',
         }),
         new OpenBrowserPlugin({

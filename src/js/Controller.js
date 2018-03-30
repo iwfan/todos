@@ -27,7 +27,7 @@ class Controller {
             this.init.call(this)
         }
         if (this.template && this.data) {
-            this.render()
+            // this.render()
         }
         return this
     }

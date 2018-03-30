@@ -1,8 +1,9 @@
-// import AV from 'leancloud-storage'
+import { Todo, AV } from './Todo'
 
 const Model = function Model(selector) {
-    // const appId = 'pDAVsDD9SILklHldH52mAXoN-gzGzoHsz'
-    // const appKey = 'R8grFdtFaI0vg3si8rubvmKL'
+    const appId = 'pDAVsDD9SILklHldH52mAXoN-gzGzoHsz'
+    const appKey = 'R8grFdtFaI0vg3si8rubvmKL'
+
     const getTpl = function getTpl() {
         return `
             <header>
@@ -13,42 +14,95 @@ const Model = function Model(selector) {
             </section>
             <ul class="list-container">
                 {{each todos as value index}} 
-                    <li class='list-item'><span>{{value}}</span><a data-id={{index}} class="remove">remove</a></li>
+                    <li class='list-item'><span>{{value.attributes.title}}</span><a data-id={{value.id}} class="remove">remove</a></li>
                 {{/each}}
             </ul>
         `
     }
 
+    const signUp = function signUp() {
+        const user = new AV.User()
+        user.setUsername('wangfan')
+        user.setPassword('wangfan')
+        user.setEmail('i.wangfan@foxmail.com')
+        return user.signUp()
+    }
+
+    const signIn = function signIn() {
+        // return AV.User.logIn('wangfan', 'wangfan')
+        return Promise.resolve()
+    }
+
+    const addTodo = function addTodo(title) {
+        const todo = new Todo()
+        todo.set('title', title)
+        return todo.save()
+    }
+
+    const removeTodo = function removeTodo(id) {
+        const todo = AV.Object.createWithoutData('Todo', id)
+        return todo.destroy()
+    }
+
     const getTodos = function getTodos() {
-        return ['代办1', '代办2', '代办3']
+        const query = new AV.Query('Todo')
+        return query.find()
+    }
+
+    const indexOfTodos = function indexOfTodos(todos, id) {
+        let index
+        let todo
+        for (index = 0; index < todos.length; index += 1) {
+            todo = todos[index]
+            if (todo.id === id) {
+                return index
+            }
+        }
+        return -1
     }
 
     return {
         element: selector,
         data: {
-            title: 'My Todo List',
+            title: 'A Todo List Based on LeanCloud',
             todos: [],
         },
         template: getTpl,
         events: {
-            'click button#add': 'addTodo',
-            'click a.remove': 'removeTodo',
+            'click button#add': 'add',
+            'click a.remove': 'remove',
         },
         init() {
-            // AV.init({ appId, appKey })
+            AV.init({ appId, appKey })
             // localStorage.setItem('debug', 'leancloud*')
-            this.data.todos = getTodos()
+            // signUp().then(data => console.log(data)).catch(e => console.error(e))
+            signIn().then(() => getTodos())
+                .then(todos => {
+                    this.data.todos = todos
+                    this.render()
+                }).catch(e => console.error(e))
         },
-        addTodo() {
+        add() {
             const data = this.$element.find('#todo_input').val()
-            this.data.todos.push(data)
-            this.render()
+            if (!data) {
+                alert('标题不能为空')
+                return
+            }
+            addTodo(data).then(todo => {
+                this.data.todos.push(todo)
+                this.render()
+            })
         },
-        removeTodo(event) {
+        remove(event) {
             const { target } = event
-            const index = target.dataset.id
-            this.data.todos.splice(index, 1)
-            this.render()
+            const { id } = target.dataset
+            removeTodo(id).then(() => {
+                const index = indexOfTodos(this.data.todos, id)
+                if (index !== -1) {
+                    this.data.todos.splice(index, 1)
+                    this.render()
+                }
+            })
         },
     }
 }
