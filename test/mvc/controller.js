@@ -1,5 +1,5 @@
 import $ from 'jquery'
-// import template from 'art-template'
+import template from 'art-template'
 
 class Controller {
     constructor(options) {

@@ -7,15 +7,17 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 const env = process.env.NODE_ENV
 module.exports = {
     mode: env || 'development',
-    // node: {
-    //     fs: 'empty',
-    // },
     entry: {
         index: './test/mvc/model.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name][chunkhash].js',
+    },
+    resolve: {
+        alias: {
+            'art-template': 'art-template/lib/template-web.js',
+        },
     },
     devServer: {
         contentBase: path.resolve(__dirname, ''),
