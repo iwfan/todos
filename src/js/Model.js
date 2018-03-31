@@ -13,7 +13,7 @@ const Model = function Model(selector) {
                 <input type="text" name="" id="todo_input"> <button id="add">submit</button>
             </section>
             <ul class="list-container">
-                {{each todos as value index}} 
+                {{each todos value index}} 
                     <li class='list-item'><span>{{value.attributes.title}}</span><a data-id={{value.id}} class="remove">remove</a></li>
                 {{/each}}
             </ul>

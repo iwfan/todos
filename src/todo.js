@@ -5,4 +5,4 @@ import Controller from './js/Controller'
 
 const options = Model('.wrapper')
 const controller = new Controller(options)
-console.log(controller)
+// console.log(controller)
