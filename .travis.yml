@@ -26,6 +26,7 @@ script:
 - yarn run build
 after_success:
 - cd ./dist/
+- ls
 - git init
 - git add --all .
 - git commit -m "Travis CI Auto Builder"
