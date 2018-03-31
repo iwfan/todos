@@ -27,6 +27,7 @@ script:
 after_success:
 - cd ./dist
 - git init
+- git checkout --orphan gh-pages
 - git add --all .
 - git commit -m "Travis CI Auto Builder"
 # 这里的 REPO_TOKEN 即之前在 travis 项目的环境变量里添加的
