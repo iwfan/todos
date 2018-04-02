@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+    <style>
+       body {
+           margin: 0;
+           padding: 0;
+           background-color: #f5f5f5;
+       }
+       .tab {
+           max-width: 320px;
+           height: 568px;
+           margin: 100px auto;
+           padding: 0 10px;
+           box-shadow: 0 0 15px 5px rgba(109, 183, 249, .2);
+           box-sizing: border-box;
+           border-radius: 10px;
+           overflow: hidden;
+       }
+       .tab .tab-nav {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            /* height: 40px; */
+       }
+       .tab .tab-nav .tab-nav-item {
+            display: inline-block;
+            /* flex: 1 0 100px; */
+            width: 40%;
+            color: #555;
+            line-height: 40px;
+            text-align: center;
+            background-color: #DFE7ED;
+            border-radius: 4px;
+            text-decoration-line: none;
+        }
+        .tab .tab-nav .tab-nav-item:hover {
+            background-color: #ACD9FA;
+        }
+        .tab .tab-nav .active {
+            background-color: #5AAFF9;
+        }
+        .tab .tab-panel {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .tab .tab-panel .tab-panel-item:not(:first-child) {
+            display: none;
+        }
+        .tab .tab-panel .tab-panel-item {
+            width: 100%;
+            height: 200px;
+            background: #5AAFF9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab">
+        <nav class="tab-nav">
+            <a href="#1" class="tab-nav-item active">SignIn</a>
+            <a href="#2" class="tab-nav-item">SignUp</a>
+        </nav>
+        <article class="tab-panel">
+            <section class="tab-panel-item">panel one</section>
+            <section class="tab-panel-item">panel two</section>
+        </article> 
+    </div>
+</body>
+</html>
