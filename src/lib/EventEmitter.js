@@ -115,4 +115,4 @@ proto.emit = function emit(evt, ...args) {
     return this.emitListener.apply(this, [evt].concat(args))
 }
 
-export default EventEmitter
+// export default EventEmitter

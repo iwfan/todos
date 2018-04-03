@@ -31,17 +31,43 @@
        }
        .tab .tab-nav .tab-nav-item {
             display: inline-block;
-            /* flex: 1 0 100px; */
             width: 40%;
             color: #555;
-            line-height: 40px;
+            height: 40px;
             text-align: center;
             background-color: #DFE7ED;
             border-radius: 4px;
             text-decoration-line: none;
+            position: relative;
+            overflow: hidden;
         }
-        .tab .tab-nav .tab-nav-item:hover {
+        .tab .tab-nav .item-title {
+            display: inline-block;
+            position: absolute;
+            z-index: 2;
+        } 
+        .tab .tab-nav .tab-nav-item::after {
+            content: '';
+            display: block;
+            position: absolute;
+            /* background-color: #ACD9FA; */
+            top: 0;
+            bottom: 0;
+            left: 15%;
+            right: 15%;
+            z-index: 1;
+            border-radius: 50% 50% 4px 4px / 99% 99% 1% 1%;
+        }
+        .tab .tab-nav .tab-nav-item:hover:not(.active)::after {
             background-color: #ACD9FA;
+            border-radius: 4px;
+            top: -20%;
+            left: -20%;
+            right: -20%;
+            /* transition: .5s linear; */
+            transition-property: border-radius, top, left, right;
+            transition-duration: .5s;
+            transition-timing-function: linear;
         }
         .tab .tab-nav .active {
             background-color: #5AAFF9;
@@ -64,12 +90,12 @@
 <body>
     <div class="tab">
         <nav class="tab-nav">
-            <a href="#1" class="tab-nav-item active">SignIn</a>
-            <a href="#2" class="tab-nav-item">SignUp</a>
+            <a href="#1" class="tab-nav-item active"><span class="item-title">SignIn</span></a>
+            <a href="#2" class="tab-nav-item"><span class="item-title"></span></a>
         </nav>
         <article class="tab-panel">
-            <section class="tab-panel-item">panel one</section>
-            <section class="tab-panel-item">panel two</section>
+            <section class="tab-panel-item">panel</section>
+            <section class="tab-panel-item">panel</section>
         </article> 
     </div>
 </body>

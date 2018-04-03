@@ -37,6 +37,8 @@
             "error",
             "as-needed"
         ],
-        "no-useless-escape": "off"
+        "no-useless-escape": "off",
+        "no-restricted-syntax": "off",
+        "no-underscore-dangle": "off"
     }
 }

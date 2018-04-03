@@ -4,9 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 
-const env = process.env.NODE_ENV
 module.exports = {
-    mode: env || 'development',
     entry: {
         index: './src/todo.js',
     },
