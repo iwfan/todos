@@ -64,13 +64,13 @@ function observeArray(array) {
 
     for (const method of Object.keys(arrayMethod)) {
         afterProto[method] = function f(...args) {
+            const result = beforeProto[method].apply(this, args)
             const target = arrayMethod[method](args)
             if (target && target.length) {
                 for (const key of target) {
                     observe(target[key])
                 }
             }
-            const result = beforeProto[method].apply(this, args)
             console.log('数组发生变动', target)
             // notify
             dep.notify(...target)
