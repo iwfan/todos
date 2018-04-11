@@ -13,7 +13,7 @@
             <button v-click='increment'>增加</button>
         <!-- </form> -->
         <h3 v-bind='number'></h3>
-        <h4>{{number}}</h4>
+        <h4>{{title}}</h4>
     </div>
     <script src="V.js"></script>
     <script>
@@ -23,6 +23,7 @@
                 el: '#app',
                 data: {
                     number: 0,
+                    title: 'vue',
                 },
                 method: {
                     increment() {
