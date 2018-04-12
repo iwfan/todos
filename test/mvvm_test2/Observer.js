@@ -6,7 +6,6 @@ import Dep from './Dep.js'
  * https://github.com/youngwind/blog/issues/85
  */
 
-const dep = Dep()
 function observe(data) {
     // 如果data属于基本数据类型的话则不劫持
     if (!data || typeof data !== 'object') {
@@ -22,6 +21,7 @@ function observe(data) {
 function observeObject(data) {
     for (const key of Object.keys(data)) {
         let val = data[key]
+        const dep = Dep()
         Object.defineProperty(data, key, {
             configurable: true,
             enumerable: true,

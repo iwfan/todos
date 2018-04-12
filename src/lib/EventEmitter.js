@@ -3,7 +3,7 @@
  */
 function EventEmitter() {}
 
-let proto = EventEmitter.prototype
+const proto = EventEmitter.prototype
 
 // 获取全部的事件监听
 proto._getEvents = function _getEvents() {
@@ -12,7 +12,7 @@ proto._getEvents = function _getEvents() {
 
 // 获取指定事件的监听
 proto.getListeners = function getListeners(evt) {
-    let events = this._getEvents()
+    const events = this._getEvents()
     return events[evt] || (events[evt] = [])
 }
 
@@ -30,7 +30,7 @@ proto.validListener = function validListener(listener) {
 
 // 获取指定监听器在数组中的索引
 proto.indexOfListener = function indexOfListener(listeners, listener) {
-    let isWrapperObject = typeof listener === 'object'
+    const isWrapperObject = typeof listener === 'object'
     let index = listeners.length
     let item
     while (index--) {
@@ -39,15 +39,15 @@ proto.indexOfListener = function indexOfListener(listeners, listener) {
             return index
         }
     }
-    return -1   
+    return -1
 }
 
 // 添加事件监听
 proto.addListener = function addListener(evt, listener) {
     this.validListener(listener)
 
-    let listeners = this.getListeners(evt)
-    let isWrapperObject = typeof listener === 'object'
+    const listeners = this.getListeners(evt)
+    const isWrapperObject = typeof listener === 'object'
 
     if (this.indexOfListener(listeners, listener) === -1) {
         [].push.call(listeners, isWrapperObject ? listener : {
@@ -58,7 +58,7 @@ proto.addListener = function addListener(evt, listener) {
     return this
 }
 
-// 
+//
 proto.on = function on(evt, listener) {
     return this.addListener(evt, listener)
 }
@@ -71,16 +71,16 @@ proto.once = function once(evt, listener) {
     })
 }
 
-//移除事件监听
+// 移除事件监听
 proto.removeListener = function removeListener(evt, listener) {
     // 不传入具体函数的话，就清空此事件下的函数
     if (!listener) {
-       delete this._getEvents()[evt]
-       return
-    } 
-    // 
-    let listeners = this.getListeners(evt)
-    let index = this.indexOfListener(listeners, listener)
+        delete this._getEvents()[evt]
+        return
+    }
+    //
+    const listeners = this.getListeners(evt)
+    const index = this.indexOfListener(listeners, listener)
 
     // 删除指定的监听函数
     if (index !== -1) {
@@ -96,8 +96,7 @@ proto.off = function off(evt, listener) {
 
 // 触发事件
 proto.emitListener = function emitListener(evt, ...args) {
-    let listeners = this.getListeners(evt)
-    // 
+    const listeners = this.getListeners(evt)
     let index = listeners.length
     let item
     while (index--) {
@@ -112,7 +111,7 @@ proto.emitListener = function emitListener(evt, ...args) {
 
 // 触发事件
 proto.emit = function emit(evt, ...args) {
-    return this.emitListener.apply(this, [evt].concat(args))
+    return this.emitListener(evt, ...args)
 }
 
-// export default EventEmitter
+export default EventEmitter

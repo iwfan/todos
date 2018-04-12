@@ -1,8 +1,18 @@
 import 'babel-polyfill'
 import './css/index.css'
-import Model from './js/Model'
-import Controller from './js/Controller'
+import V from './js/V'
 
-const options = Model('.wrapper')
-const controller = new Controller(options)
-// console.log(controller)
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new V({
+        el: '#app',
+        data: {
+            number: 0,
+            title: ['vue', 'react'],
+        },
+        method: {
+            increment() {
+                this.number++
+            },
+        },
+    })
+})
