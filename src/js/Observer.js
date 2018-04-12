@@ -91,4 +91,4 @@ function observeArray(array) {
     }
 }
 
-export { observer, Watcher, Dep }
+export default observer
