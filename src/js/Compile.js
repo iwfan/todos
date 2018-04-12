@@ -1,22 +1,21 @@
 import Watcher from './Watcher'
 
-export default function compile(root, data, context) {
-    if (!root || !(root instanceof Node)) {
-        throw new Error('xx')
+function nodeToFragment(node) {
+    const fragment = document.createDocumentFragment()
+    const child = node.firstChild
+    while (child) {
+        fragment.appendChild(child)
     }
+    return fragment
+}
+
+function compileElement(root, data, context) {
     const nodes = root.childNodes
     for (const node of Array.from(nodes)) {
-        //
-        if (node.nodeType === Node.TEXT_NODE) {
-            // 处理属性节点
-            // if (/\s/.test(node.nodeValue)) {
-            //     continue
-            // }
-            if (/\{\{(.*?)\}\}/g.test(node.nodeValue)) {
-                const attrVal = RegExp.$1
-                node.nodeValue = data[attrVal]
-                Watcher.create(context, node, attrVal, 'nodeValue')
-            }
+        if (node.nodeType === Node.TEXT_NODE && /\{\{(.*?)\}\}/g.test(node.nodeValue)) {
+            const attrVal = RegExp.$1
+            node.nodeValue = data[attrVal]
+            Watcher.create(context, node, attrVal, 'nodeValue')
         } else if (node.nodeType === Node.ELEMENT_NODE) {
             // 处理普通的元素节点
             if (node.hasAttribute('v-click')) {
@@ -54,11 +53,21 @@ export default function compile(root, data, context) {
                         }
                     }
                     callback()
-                    Watcher.create(context, node, exp, 'v-for', callback)
+                    Watcher.create(context, node, exp, callback)
                 }
             } else if (node.hasChildNodes()) {
                 compile(node, data, context)
             }
         }
     }
+}
+
+export default function compile(root, data, context) {
+    if (!root || !(root instanceof Node)) {
+        throw new Error('xx')
+    }
+    const vm = context
+    vm.$fragment = nodeToFragment(root)
+    compileElement(vm.$fragment, data, vm)
+    root.appendChild(vm.$fragment)
 }

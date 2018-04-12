@@ -1,22 +1,22 @@
-function Watcher(vm, el, exp, attr, callback) {
+function Watcher(vm, el, exp, attrOrFn) {
     this.vm = vm // V 实例
     this.el = el // DOM元素
     this.exp = exp // 属性表达式
-    this.attr = attr // DOM属性
-    this.callback = callback
+    this.attrOrFn = attrOrFn // DOM属性
     this.value = this.getValue()
 }
 
-Watcher.create = function create(vm, el, exp, attr, callback) {
-    return new Watcher(vm, el, exp, attr, callback)
+Watcher.create = function create(vm, el, exp, attr) {
+    return new Watcher(vm, el, exp, attr)
 }
 Watcher.target = null
 
 Object.assign(Watcher.prototype, {
     update() {
-        this.el[this.attr] = this.vm._data[this.exp]
-        if (this.callback) {
-            this.callback.call(this.vm)
+        if (typeof this.attrOrFn === 'function') {
+            this.attrOrFn.call(this.vm)
+        } else {
+            this.el[this.attrOrFn] = this.vm._data[this.exp]
         }
     },
     getValue() {
