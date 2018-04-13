@@ -16,7 +16,12 @@ Object.assign(Watcher.prototype, {
         if (typeof this.attrOrFn === 'function') {
             this.attrOrFn.call(this.vm)
         } else {
-            this.el[this.attrOrFn] = this.vm._data[this.exp]
+            const args = this.exp.split('.')
+            let { _data } = this.vm
+            while (args.length) {
+                _data = _data[args.shift()]
+            }
+            this.el[this.attrOrFn] = _data
         }
     },
     getValue() {
