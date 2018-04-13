@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
             number: 0,
             title: ['vue', 'react'],
         },
+        created: function created() {
+            console.log(this)
+        },
         method: {
             increment() {
                 this.number++

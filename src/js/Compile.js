@@ -1,10 +1,12 @@
 import Watcher from './Watcher'
 
+// 将DOM节点缓存入文档片段中
 function nodeToFragment(node) {
     const fragment = document.createDocumentFragment()
-    const child = node.firstChild
+    let child = node.firstChild
     while (child) {
         fragment.appendChild(child)
+        child = node.firstChild
     }
     return fragment
 }
@@ -43,7 +45,9 @@ function compileElement(root, data, context) {
                     const pNode = node.parentNode
                     const callback = () => {
                         if (data[exp] && data[exp].length) {
-                            pNode.innerHTML = ''
+                            while (pNode.firstChild) {
+                                pNode.removeChild(pNode.firstChild)
+                            }
                             for (const itor of data[exp]) {
                                 const cloneNode = node.cloneNode(true)
                                 cloneNode.removeAttribute('v-for')
@@ -66,8 +70,7 @@ export default function compile(root, data, context) {
     if (!root || !(root instanceof Node)) {
         throw new Error('xx')
     }
-    const vm = context
-    vm.$fragment = nodeToFragment(root)
-    compileElement(vm.$fragment, data, vm)
-    root.appendChild(vm.$fragment)
+    // const fragment = nodeToFragment(root)
+    compileElement(root, data, context)
+    // root.appendChild(fragment)
 }

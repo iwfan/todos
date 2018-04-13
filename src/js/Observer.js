@@ -37,9 +37,6 @@ function observeObject(obj) {
                     // 新的属性继续添加监听
                     value = newValue
                     observer(newValue)
-                    if (Array.isArray(value)) {
-                        value.addWatcher()
-                    }
                     // 修改属性时， 发布通知
                     dep.notify()
                 }
@@ -64,7 +61,7 @@ function observeArray(array) {
         shift: () => undefined,
         splice: args => args.slice(2),
         sort: () => undefined,
-        reserve: () => undefined,
+        reverse: () => undefined,
     }
     _array.addWatcher = () => {
         if (Watcher.target) {

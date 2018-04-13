@@ -1,6 +1,6 @@
 import observer from './Observer'
 import Watcher from './Watcher'
-// import compile from './Compile'
+import compile from './Compile'
 
 function V(options) {
     this.$options = options
@@ -9,7 +9,7 @@ function V(options) {
     this._method = options.method
     observer(this._data)
     this._dataProxy(this, this._data)
-    this._compile(this.$el, this._data)
+    compile(this.$el, this._data, this)
     // create
     if (options.created && typeof options.created === 'function') {
         options.created.call(this)
