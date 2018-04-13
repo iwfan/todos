@@ -1,7 +1,7 @@
 import 'babel-polyfill'
 import './css/index.css'
-import V from './js/V'
-import storage from './js/StoragePolicy'
+import V from './js/mvvm/V'
+import storage from './js/storage/StoragePolicy'
 
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new V({
@@ -23,7 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
             },
             remove(evt) {
-                this.todos.splice(evt.target.dataset.id, 1)
+                const key = evt.target.dataset.id
+                storage.remove(key).then(() => {
+                    let index = 0
+                    for (const todo of this.todos) {
+                        if (todo.id === key) {
+                            this.todos.splice(index, 1)
+                            break
+                        }
+                        index += 1
+                    }
+                })
             },
         },
     })

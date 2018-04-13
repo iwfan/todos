@@ -36,7 +36,6 @@ browserStorage.get = function get(primarykey) {
 
 browserStorage.getAll = function getAll() {
     const todos = store.get(key)
-    console.log(todos)
     return Promise.resolve(Object.values(todos))
 }
 
