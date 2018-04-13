@@ -6,7 +6,7 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin')
 
 module.exports = {
     entry: {
-        index: './src/todo.js',
+        index: './src/index.js',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),

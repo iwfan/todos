@@ -26,8 +26,8 @@ function compileElement(root, data, context) {
             }
             if (node.hasAttribute('v-bind')) {
                 const attrVal = node.getAttribute('v-bind')
-                node.innerHTML = data[attrVal]
-                Watcher.create(context, node, attrVal, 'innerHTML')
+                node.dataset.id = data[attrVal]
+                Watcher.create(context, node, attrVal, 'dataset.id')
             }
             if (node.hasAttribute('v-model')
                 && (node.tagName.toUpperCase() === 'INPUT' || node.tagName.toUpperCase() === 'TEXTAREA')) {
@@ -48,11 +48,13 @@ function compileElement(root, data, context) {
                             while (pNode.firstChild) {
                                 pNode.removeChild(pNode.firstChild)
                             }
+                            let index = 0
                             for (const itor of data[exp]) {
                                 const cloneNode = node.cloneNode(true)
                                 cloneNode.removeAttribute('v-for')
-                                compile(cloneNode, { [alias]: itor }, context)
+                                compile(cloneNode, { [alias]: itor, index }, context)
                                 pNode.appendChild(cloneNode)
+                                index += 1
                             }
                         }
                     }

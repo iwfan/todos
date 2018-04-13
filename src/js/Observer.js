@@ -72,13 +72,13 @@ function observeArray(array) {
         _array[method] = (...args) => {
             const result = proto[method].apply(array, args)
             // 获取将要改变的数据
-            const target = methods[method](args)
+            // const target = methods[method](args)
             // 新数据也要添加getter/setter
-            if (target && target.length) {
-                for (const iterator of target) {
-                    observer(iterator)
-                }
-            }
+            // if (target && target.length) {
+            //     for (const iterator of target) {
+            //         observer(iterator)
+            //     }
+            // }
             // 通知发生变更
             dep.notify()
             return result
@@ -86,9 +86,9 @@ function observeArray(array) {
     }
     Object.setPrototypeOf(array, _array)
     // 给数组的每一项也添加getter/setter
-    for (const iterator of array) {
-        observer(iterator)
-    }
+    // for (const iterator of array) {
+    //     observer(iterator)
+    // }
 }
 
 export default observer
