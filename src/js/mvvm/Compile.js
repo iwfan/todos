@@ -57,10 +57,10 @@ function compileElement(root, data, context) {
                     const exp = RegExp.$2
                     const pNode = node.parentNode
                     const callback = () => {
+                        while (pNode.firstChild) {
+                            pNode.removeChild(pNode.firstChild)
+                        }
                         if (data[exp] && data[exp].length) {
-                            while (pNode.firstChild) {
-                                pNode.removeChild(pNode.firstChild)
-                            }
                             let index = 0
                             for (const itor of data[exp]) {
                                 const cloneNode = node.cloneNode(true)
