@@ -1,7 +1,7 @@
 import browserStorage from './BrowserStorage'
 import leanCloudStorage from './LeanCloudStorage'
 
-const storages = [browserStorage, leanCloudStorage]
+const storages = [leanCloudStorage, browserStorage]
 
 export default (function fn() {
     for (const itor of storages) {

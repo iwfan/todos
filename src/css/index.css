@@ -6,15 +6,65 @@ body {
     background-size: 200px;
 }
 .wrapper {
+    box-sizing: border-box;
     max-width: 600px;
-    height: 400px;
-    border: 1px solid black;
-    margin: 0 auto;
+    margin: 50px auto;
+    padding: 20px;
 }
 .wrapper .title {
     text-align: center;
+    color: #555;
+}
+.wrapper .input-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin: 40px 0;
+}
+.wrapper .input-container input {
+    width: 60%;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    outline: none;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+.wrapper .input-container button {
+    width: 80px;
+    height: 40px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: skyblue;
+    cursor: pointer;    
+    outline: none;
+}
+.wrapper .list-container {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.wrapper .list-container li {
+    box-sizing: border-box;
+    width: 100%;
+    line-height: 50px;
+    background-color: #fff;
+    margin: 15px 0;
+    padding: 0 20px;
+    box-shadow: 0 8px 16px 0 rgba(7,17,27,.1);
+    border-radius: 10px;
+    color: #333;
+}
+.wrapper .list-container li.done span {
+    text-decoration: line-through;
 }
 li > a {
     float: right;
     cursor: pointer;
+    text-decoration: underline;
+    color: palevioletred;
 }

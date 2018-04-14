@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app = new V({
         el: '#todo',
         data: {
-            title: 'A Todo List',
+            title: 'Todo List',
             text_value: '',
             todos: [],
         },
@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         method: {
             add() {
+                if (!this.text_value) {
+                    alert('不能添加空值')
+                    return
+                }
                 storage.add({ title: this.text_value }).then(todo => {
                     this.todos.push(todo)
                 })
@@ -34,6 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         index += 1
                     }
                 })
+            },
+            done(evt) {
+                const { target } = evt
+                if (target.tagName === 'LI') {
+                    target.classList.add('done')
+                }
             },
         },
     })

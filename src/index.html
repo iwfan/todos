@@ -15,7 +15,7 @@
             <section class="input-container">
                 <input v-model="text_value" type="text"> <button v-click="add">submit</button>
             </section>
-            <ul class="list-container">
+            <ul class="list-container" v-click='done'>
                 <li v-for="t of todos" class='list-item'><span>{{t.title}}</span><a v-bind="t.id" v-click="remove">remove</a></li>
             </ul>
         </div>
