@@ -1,1 +1,4 @@
-dist/*
+/build/
+/config/
+/dist/
+/*.js
