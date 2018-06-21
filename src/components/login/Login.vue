@@ -2,9 +2,12 @@
   .login
     .login-wrapper
       .login-container
-        nav
-          a(@click.stop="activeComponent = signin") SIGN IN
-          a(@click.stop="activeComponent = signup") SIGN UP
+        nav.nav
+          a.nav-item(@click.stop="activeComponent = 'signin'" :class="{'active': activeComponent === 'signin'}") SIGN IN
+          a.nav-item(@click.stop="activeComponent = 'signup'" :class="{'active': activeComponent === 'signup'}") SIGN UP
+        header.img-wrapper
+          .img-container
+            img(src="@/assets/icon.svg" alt="avatar" title="avatar" width="60%")
         keep-alive
           component(:is="activeComponent")
 </template>
@@ -15,7 +18,6 @@ export default {
   name: 'login',
   data () {
     return {
-      activeTab: 'signin',
       activeComponent: 'signin'
     }
   },
@@ -43,19 +45,23 @@ export default {
     border-radius 10px
     box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3)
   &-container
-    padding-top 20px
-    height 400px
-
-/*  nav
-    text-align center
-    font-size 16px
-    font-weight 600
-    color #cccccc
-    a
-      display: inline-block
-      margin 10px
-      padding 5px
-      &.active
-        color: #0d0d0d;
-        border-bottom: 2px solid #5fbae9;*/
+    .nav
+      padding 20px 0 0
+      text-align center
+      font-size 16px
+      font-weight 600
+      color #cccccc
+      &-item
+        cursor pointer
+        display: inline-block
+        margin 10px
+        padding 5px
+        &.active
+          color #0d0d0d
+          border-bottom 2px solid #5fbae9
+        &:hover
+          color #0d0d0d
+    .img-wrapper
+      .img-container
+        text-align center
 </style>

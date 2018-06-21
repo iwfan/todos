@@ -6271,6 +6271,10 @@ void-elements@^2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/void-elements/download/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
 
+vue-awesome@^2.3.7:
+  version "2.3.7"
+  resolved "http://registry.npm.taobao.org/vue-awesome/download/vue-awesome-2.3.7.tgz#dd381baede4dadaa2a8c735c2a6378d93c8655c4"
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "http://registry.npm.taobao.org/vue-eslint-parser/download/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
