@@ -1,35 +1,26 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue';
+import Vue from 'vue'
 import AV from 'leancloud-storage'
-import App from './App';
-import router from './router';
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 import 'normalize.css'
-Vue.config.productionTip = false;
+import App from './App'
+import router from './router'
+
+Vue.config.productionTip = false
+Vue.use(ElementUI)
 Vue.prototype.$AV = AV
-const APPID = 'PwJpIXfhKL1WH0QDmdutG9Eb-gzGzoHsz'
-const APPKEY = 'RPeMx26ScrwDY2Iutozf2vR1'
+// const APPID = 'PwJpIXfhKL1WH0QDmdutG9Eb-gzGzoHsz'
+// const APPKEY = 'RPeMx26ScrwDY2Iutozf2vR1'
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el: '#todos',
   router,
   components: { App },
   template: '<App/>',
-  created() {
-    AV.init({ appId: APPID, appKey: APPKEY })
-    this.checkUserStatus()
-  },
-  watch: {
-    '$route': this.checkUserStatus
-  },
-  methods: {
-    checkUserStatus() {
-      if (AV.User.current()) {
-        this.$route.push('/')
-      } else {
-        this.$route.push('/login')
-      }
-    }
+  created () {
+    // AV.init({ appId: APPID, appKey: APPKEY })
   }
-});
+})

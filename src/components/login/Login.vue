@@ -1,18 +1,56 @@
 <template lang="pug">
-  .login-wrapper
-      button(@click="doLogin")
+  .login
+    .login-wrapper
+      .login-container
+        nav
+          router-link(to="/about") SIGN IN
+          router-link(to="/about") SIGN UP
+        router-view
 </template>
 <script>
-  export default {
-    name: 'login',
-    methods: {
-      doLogin() {
-        this.$AV.login()
-        this.$route.push('/')
+export default {
+  name: 'login',
+  data () {
+    return {
+      active: 'signin',
+      loginFormData: {
+        name: ''
       }
     }
   }
+}
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
+.login
+  display flex
+  align-items center
+  flex-direction column
+  justify-content center
+  width 100%
+  height 100%
+  background-color #56baed
+  &-wrapper
+    width 90%
+    max-width 400px
+    margin 0px auto
+    background-color: #fff
+    border 1px solid #ebebeb
+    border-radius 10px
+    box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3)
+  &-container
+    padding-top 20px
+    height 400px
 
+/*  nav
+    text-align center
+    font-size 16px
+    font-weight 600
+    color #cccccc
+    a
+      display: inline-block
+      margin 10px
+      padding 5px
+      &.active
+        color: #0d0d0d;
+        border-bottom: 2px solid #5fbae9;*/
 </style>
