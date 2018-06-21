@@ -3,20 +3,25 @@
     .login-wrapper
       .login-container
         nav
-          router-link(to="/about") SIGN IN
-          router-link(to="/about") SIGN UP
-        router-view
+          a(@click.stop="activeComponent = signin") SIGN IN
+          a(@click.stop="activeComponent = signup") SIGN UP
+        keep-alive
+          component(:is="activeComponent")
 </template>
 <script>
+import signin from '@/components/signin/signin'
+import signup from '@/components/signup/signup'
 export default {
   name: 'login',
   data () {
     return {
-      active: 'signin',
-      loginFormData: {
-        name: ''
-      }
+      activeTab: 'signin',
+      activeComponent: 'signin'
     }
+  },
+  components: {
+    signin,
+    signup
   }
 }
 </script>

@@ -14,9 +14,9 @@
     footer
 </template>
 <script>
-  export default {
-    name: 'signin'
-  }
+export default {
+  name: 'signin'
+}
 </script>
 <style lang="stylus" scoped>
 header
