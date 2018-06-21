@@ -62,6 +62,7 @@ export default {
         &:hover
           color #0d0d0d
     .img-wrapper
+      margin-bottom 10px
       .img-container
         text-align center
 </style>

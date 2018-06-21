@@ -1,13 +1,13 @@
 <template lang="pug">
   article
-    el-form(label-position="left" :model="formData")
-      el-form-item
+    el-form(label-position="left" label-width="60px" :model="formData")
+      el-form-item(label="用户名")
         el-input(:model="formData.name" placeholder="username")
-      el-form-item
+      el-form-item(label="邮箱")
         el-input(:model="formData.email" placeholder="email")
-      el-form-item
+      el-form-item(label="密码")
         el-input(:model="formData.password" type="password" placeholder="password")
-      el-form-item(style="text-align:center")
+      el-form-item(label-width="0" style="text-align:center")
         el-button(type="primary") SIGN UP
 </template>
 <script>
