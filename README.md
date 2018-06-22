@@ -1,5 +1,5 @@
 # todos
-
+[![Build Status](https://travis-ci.org/iwfan/todos.svg?branch=master)](https://travis-ci.org/iwfan/todos)
 > A Vue.js project
 
 ## Build Setup
