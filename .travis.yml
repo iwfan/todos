@@ -21,7 +21,7 @@ before_install:
 - export PATH=$HOME/.yarn/bin:$PATH
 install:
 # 不用yarn的话这里改成 npm i 即可
-- yarn 
+- yarn
 script:
 - yarn run build
 after_success:
