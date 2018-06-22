@@ -12,6 +12,7 @@
           component(:is="activeComponent")
 </template>
 <script>
+import { getCurrentUser } from '@/assets/js/leadCloudUtil'
 import signin from '@/components/signin/signin'
 import signup from '@/components/signup/signup'
 export default {
@@ -24,6 +25,11 @@ export default {
   components: {
     signin,
     signup
+  },
+  create () {
+    if (getCurrentUser()) {
+      this.$route.push('/')
+    }
   }
 }
 </script>
@@ -46,7 +52,6 @@ export default {
     box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3)
   &-container
     .nav
-      padding 20px 0 0
       text-align center
       font-size 16px
       font-weight 600
@@ -54,8 +59,8 @@ export default {
       &-item
         cursor pointer
         display: inline-block
-        margin 10px
-        padding 5px
+        padding 20px 4px 4px
+        margin-bottom 10px
         &.active
           color #0d0d0d
           border-bottom 2px solid #5fbae9
