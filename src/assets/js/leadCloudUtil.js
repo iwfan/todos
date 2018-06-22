@@ -18,8 +18,8 @@ export function singUp ({username, password, email}) {
   return user.signUp()
 }
 
-export function login () {
-
+export function login ({username, password}) {
+  return AV.User.logIn(username, password)
 }
 export function logout () {
   AV.User.logOut()
