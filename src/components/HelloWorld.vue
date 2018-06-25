@@ -5,17 +5,12 @@
 </template>
 
 <script>
-import { getCurrentUser, logout } from '@/assets/js/leadCloudUtil'
+import { logout } from '@/assets/js/leadCloudUtil'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
-    }
-  },
-  created () {
-    if (!getCurrentUser()) {
-      this.$router.push('/login')
     }
   },
   methods: {

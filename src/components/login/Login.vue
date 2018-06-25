@@ -12,7 +12,6 @@
           component(:is="activeComponent")
 </template>
 <script>
-import { getCurrentUser } from '@/assets/js/leadCloudUtil'
 import signin from '@/components/signin/signin'
 import signup from '@/components/signup/signup'
 export default {
@@ -25,11 +24,6 @@ export default {
   components: {
     signin,
     signup
-  },
-  create () {
-    if (getCurrentUser()) {
-      this.$route.push('/')
-    }
   }
 }
 </script>
