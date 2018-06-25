@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import index from '@/components/index'
 import Login from '@/components/login/Login'
-import { getCurrentUser } from '@/assets/js/leadCloudUtil'
+import { init, getCurrentUser } from '@/assets/js/leadCloudUtil'
 Vue.use(Router)
 
 const router = new Router({
@@ -10,28 +10,35 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'index',
+      component: index,
+      beforeEnter (to, from, next) {
+        if (!from.name) {
+          init()
+        }
+        if (!getCurrentUser()) {
+          next({name: 'login'})
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      beforeEnter (to, from, next) {
+        if (!from.name) {
+          init()
+        }
+        if (getCurrentUser()) {
+          next({name: 'index'})
+        } else {
+          next()
+        }
+      }
     }
   ]
-})
-
-router.beforeEach((to, from, next) => {
-  // ...
-  debugger
-  console.log(to, from)
-  if (from.name && to.path === '/' && !getCurrentUser()) {
-    next('/login')
-  } else if (to.path === '/login' && getCurrentUser()) {
-    next('/')
-  } else {
-    next()
-  }
 })
 
 export default router
