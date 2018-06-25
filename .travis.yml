@@ -26,6 +26,7 @@ script:
 - yarn run build
 after_success:
 - cd ./dist
+- echo todo.wangfan.site > CNAME
 - git init
 - git checkout --orphan gh-pages
 - git add --all .
