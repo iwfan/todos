@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/display.css'
+import { init } from '@/assets/js/leadCloudUtil'
 import Icon from 'vue-awesome/components/Icon'
 import 'vue-awesome/icons'
 import 'normalize.css'
@@ -13,10 +15,11 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.component('icon', Icon)
-
+// leancloud init
+init()
 /* eslint-disable no-new */
 new Vue({
-  el: '#todos',
+  el: '#app',
   router,
   components: { App },
   template: '<App/>'

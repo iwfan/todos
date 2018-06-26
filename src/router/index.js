@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/components/index'
+import Todos from '@/components/todos'
 import Login from '@/components/login/Login'
-import { init, getCurrentUser } from '@/assets/js/leadCloudUtil'
+import { getCurrentUser } from '@/assets/js/leadCloudUtil'
 Vue.use(Router)
 
 const router = new Router({
@@ -10,12 +10,9 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'index',
-      component: index,
+      name: 'todos',
+      component: Todos,
       beforeEnter (to, from, next) {
-        if (!from.name) {
-          init()
-        }
         if (!getCurrentUser()) {
           next({name: 'login'})
         } else {
@@ -28,9 +25,6 @@ const router = new Router({
       name: 'login',
       component: Login,
       beforeEnter (to, from, next) {
-        if (!from.name) {
-          init()
-        }
         if (getCurrentUser()) {
           next({name: 'index'})
         } else {
