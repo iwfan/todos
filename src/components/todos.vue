@@ -12,7 +12,16 @@
           el-input(placeholder="快速查找" size="small" auto-complete="off")
         .header-container__right
           icon(name="user-circle" scale="1.5" style="vertical-align: middle")
-          span {{ currentUser }}
+          el-dropdown(trigger="click" size="medium" :hide-on-click="false")
+            span.el-dropdown-link {{ currentUser }}
+              i.el-icon-arrow-down.el-icon--right
+            el-dropdown-menu(slot="dropdown")
+              el-dropdown-item
+                i.el-icon-setting.el-icon--left
+                | 账户管理
+              el-dropdown-item(divided @click.native="logout")
+                i.el-icon-circle-close.el-icon--left
+                | 注销登录
     .main-wrapper
       aside.hidden-xs-only
         el-collapse(:value="['1', '2']" style="border-top: none")
@@ -66,13 +75,18 @@ export default {
   },
   methods: {
     logout () {
-      logout()
-      this.$router.push('/login')
+      this.$confirm('确定要注销登录吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        logout()
+        this.$router.push('/login')
+      }).catch(() => {})
     }
   },
   created () {
     this.currentUser = getCurrentUser().getUsername()
-    console.log(this.currentUser)
   }
 }
 </script>
