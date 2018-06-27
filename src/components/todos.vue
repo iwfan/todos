@@ -32,7 +32,11 @@
         section(style="margin-top:30px")
           el-card(v-for="(item, index) of tableData" :key="index" style="margin: 10px 0;")
             .clearfix(slot="header") {{ item.address }}
-            span {{ item.name }}
+            el-tag 标签一
+            el-tag(type="success") 标签二
+            el-tag(type="info") 标签三
+            el-tag(type="warning") 标签四
+            el-tag(type="danger") 标签五
 </template>
 
 <script>
