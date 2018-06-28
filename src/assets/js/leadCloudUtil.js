@@ -49,7 +49,7 @@ export async function login ({username, password}) {
   }
 }
 export async function logout () {
-  AV.User.logOut()
+  await AV.User.logOut()
 }
 
 export async function forgotPass (email) {

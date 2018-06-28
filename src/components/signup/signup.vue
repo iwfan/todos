@@ -18,10 +18,10 @@
               a-form-item(fieldDecoratorId="password" :fieldDecoratorOptions="rules.password" :hasFeedback="true")
                 a-input(placeholder='密码' style="height: 40px" type='password' autocomplete="off")
                   a-icon(slot="prefix" type='lock' style="color:#C4C4C4")
-              a-form-item(fieldDecoratorId="invitcode" :fieldDecoratorOptions="{rules: [{required: true, message: '邀请码为必填项'}]}" :hasFeedback="true")
+              a-form-item(fieldDecoratorId="invitcode" :fieldDecoratorOptions="rules.invitcode" :hasFeedback="true")
                 a-input(placeholder='邀请码' style="height: 40px" autocomplete="off")
                   a-icon(slot="prefix" type='lock' style="color:#C4C4C4")
-              a-form-item(style="text-align: justfiy")
+              a-form-item
                 a-button(@click="reset" style="width: 35%; height: 40px;float: left ") 重置
                 a-button(type='primary' style="width: 60%; height: 40px;float: right" htmlType="submit"
                 icon="user-add" :loading="loading" :disabled="hasErrors(form.getFieldsError())") 创建账户
@@ -78,7 +78,8 @@ export default {
       this.form.setFieldsValue({
         username: '',
         email: '',
-        password: ''
+        password: '',
+        invitcode: ''
       })
     }
   }

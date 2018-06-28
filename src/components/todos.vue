@@ -1,18 +1,31 @@
 <template lang="pug">
   .todos
     header.header-wrapper
-      a-row(class="header-container")
+      .header-container
         .header-container__left
-          .sider-switch.hidden-sm-and-up
+          .side-switch.hidden-md-and-up
             a-icon(type="menu-unfold")
-          .logo.hidden-xs-only
+          .logo.hidden-md-and-down
             a(href="/")
               img(src="../assets/logo.png" width="40")
-        .header-container__search
         .header-container__right
-    a-row(class="main-wrapper")
-      a-col(class="aside" sm="0" xs="0" md="8" lg="8" xl="8" xxl="8" span="300px")
-      a-col(class="main")
+          .control
+            a-popover(placement="bottomRight" trigger="click")
+              template(slot="content")
+                span.pop-menu-item
+                  a-icon(type="setting" style="margin-right: 10px")
+                  | 设置
+                a-divider(style="margin: 0")
+                a-popconfirm(title="确定注销登录吗?" placement="bottom" okText="确定" cancelText="取消" @confirm="logout")
+                  span.pop-menu-item
+                    a-icon(type="logout" style="margin-right: 10px")
+                    | 注销登录
+              a-icon(type="appstore")
+        .header-container__middle
+          a-input
+    article.main-wrapper
+      aside.side-box.hidden-md-and-down
+      main.main-box
 </template>
 
 <script>
@@ -25,23 +38,37 @@ export default {
   },
   methods: {
     logout () {
-      this.$confirm('确定要注销登录吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        logout()
-        this.$router.push('/login')
-      }).catch(() => {})
+      logout().then(() => {
+        this.$router.push('/signin')
+      })
     }
   },
   created () {
-    this.currentUser = getCurrentUser().getUsername()
+    this.currentUser = getCurrentUser().get('nickname')
   }
 }
 </script>
+<style lang="stylus">
+@media (max-width: 767.98px)
+/*小于768px 是隐藏*/
+  .hidden-md-and-down
+    display none
+@media (min-width: 768px)
+  .hidden-md-and-up
+    display none
+</style>
 
 <style lang="stylus" scoped>
+.pop-menu-item
+  display block
+  width: 100%
+  &:first-child
+    padding 0 0 10px 0
+  &:last-child
+    padding 10px 0 0px 0
+  cursor: pointer
+  &:hover
+    color: #1890ff
 .todos
   height: 100%
   background-color: #fafafa
@@ -51,54 +78,55 @@ export default {
     z-index 200
     width: 100%
     height 50px
-    background-color: #ffffff
-    /*background-color #db4c3f*/
-    /*border-bottom: solid 1px #ca2100*/
+    background-color: #fff
     box-shadow: 0 1px 2px rgba(0,0,0,0.15)
     .header-container
       margin 0 auto
       max-width 950px
       min-width 320px
+      font-size 16px
+      color: #5c5c5c
+      &__left,
+      &__middle,
+      &__right
+        display inline-block
       &__left
         float left
         .logo
-          font-size: 0
-          width: 300px
-          a
-            display inline-block
-            padding 5px
-            margin-left 20px
-            img
-              width: 40px
-              height: 40px
-      &__search
-        /*flex: 1 1 auto*/
-        float left
-        margin-left 20px
-        padding 9px
-        &>>>input
-          border none
+          padding 5px 10px 5px 20px
+          /*width 300px*/
+        .side-switch
+          line-height 50px
+          padding 0 20px
+      &__middle
+        /*float left*/
+        /*width: 100%*/
+        background-color: red
+        margin-left 320px
+        /*height: 50px*/
       &__right
-        float right
-        color: #34495e
-        line-height 50px
-        span
-          margin 0 20px 0 10px
+        float: right
+        padding 0 10px
+        .control
+          line-height 50px
+          .anticon
+            margin: 0 10px
+            cursor: pointer
   .main-wrapper
-    /*display: flex*/
+    display: flex
     max-width 950px
-    min-width 350px
+    min-width 320px
     height: 100%
     margin: 0 auto
     padding-top 50px
-    .aside
-      /*flex: 0 0 300px*/
-      /*width 300px*/
-      background-color: red
+    .side-box
+      flex: 0 0 300px
+      width 300px
+      background-color: #5fbae9
       height 100%
       padding 10px 0 0 20px
-    .main
-      /*flex: 1*/
+    .main-box
+      flex: 1
       height 100%
       padding 20px
       background-color: #fff

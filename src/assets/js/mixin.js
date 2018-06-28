@@ -37,9 +37,7 @@ export const ruleMixin = {
             }
           ]
         },
-        checkpass: [
-
-        ],
+        invitcode: {rules: [{required: true, message: '邀请码为必填项'}]},
         email: {
           rules: [
             {
