@@ -18,6 +18,9 @@
               a-form-item(fieldDecoratorId="password" :fieldDecoratorOptions="rules.password" :hasFeedback="true")
                 a-input(placeholder='密码' style="height: 40px" type='password' autocomplete="off")
                   a-icon(slot="prefix" type='lock' style="color:#C4C4C4")
+              a-form-item(fieldDecoratorId="invitcode" :fieldDecoratorOptions="{rules: [{required: true, message: '邀请码为必填项'}]}" :hasFeedback="true")
+                a-input(placeholder='邀请码' style="height: 40px" autocomplete="off")
+                  a-icon(slot="prefix" type='lock' style="color:#C4C4C4")
               a-form-item(style="text-align: justfiy")
                 a-button(@click="reset" style="width: 35%; height: 40px;float: left ") 重置
                 a-button(type='primary' style="width: 60%; height: 40px;float: right" htmlType="submit"
@@ -29,7 +32,7 @@
         router-link(to="/sign") 去登录
 </template>
 <script>
-import { singUp } from '@/assets/js/leadCloudUtil'
+import { singUp, hasUser } from '@/assets/js/leadCloudUtil'
 import { ruleMixin } from '@/assets/js/mixin'
 export default {
   name: 'signup',
@@ -50,17 +53,22 @@ export default {
       this.loading = true
       this.form.validateFields((err, values) => {
         if (!err) {
-          singUp(values)
-            .then(() => {
-              this.loading = false
-              this.$message.success('创建账户成功！ 3秒后进入主页...', 3, () => {
-                this.$router.push('/')
+          hasUser(values.invitcode).then(() => {
+            singUp(values)
+              .then(() => {
+                this.loading = false
+                this.$message.success('创建账户成功！ 3秒后进入主页...', 3, () => {
+                  this.$router.push('/')
+                })
               })
-            })
-            .catch(err => {
-              this.loading = false
-              this.$message.error(err, 5)
-            })
+              .catch(err => {
+                this.loading = false
+                this.$message.error(err, 5)
+              })
+          }).catch(() => {
+            this.loading = false
+            this.$message.error('无效的邀请码', 5)
+          })
         } else {
           this.loading = false
         }

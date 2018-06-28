@@ -15,11 +15,23 @@ export function getCurrentUser () {
   return AV.User.current()
 }
 
+export async function hasUser (code) {
+  const query = new AV.Query('User')
+  let hasU = false
+  try {
+    hasU = query.get(code)
+  } catch (exception) {
+
+  }
+  return hasU
+}
+
 export async function singUp ({username, password, email}) {
   const user = new AV.User()
   user.setUsername(username)
   user.setPassword(password)
   user.setEmail(email)
+  user.set('nickname', username)
   try {
     const loginUser = await user.signUp()
     return loginUser
@@ -38,6 +50,14 @@ export async function login ({username, password}) {
 }
 export async function logout () {
   AV.User.logOut()
+}
+
+export async function forgotPass (email) {
+  try {
+    return AV.User.requestPasswordReset(email)
+  } catch (exception) {
+    throw exception.rawMessage
+  }
 }
 
 export function addFolder ({name, priority}) {

@@ -24,18 +24,25 @@
         | 还没有账户？
         router-link(to="/signup") 快速注册
       .forgot
-        router-link(to="/")
-          a-button(type="danger") 忘记密码?
+        a-button(type="danger" @click="forgetPassVisible = true") 忘记密码?
+        a-modal(title="重置密码" v-model="forgetPassVisible" @ok="handleOk" cancelText="取消" okText="重置")
+          a-form-item(:hasFeedback="true" :validateStatus='emailValidate' :help='validaEmailMsg')
+            a-input(placeholder='输入您的注册邮箱' style="height: 40px" autocomplete="off" v-model="forgetEmailAdress")
+              a-icon(slot="prefix" type='mail' style="color:#C4C4C4")
 </template>
 <script>
-import { login } from '@/assets/js/leadCloudUtil'
+import { login, forgotPass } from '@/assets/js/leadCloudUtil'
 import { ruleMixin } from '@/assets/js/mixin'
 export default {
   name: 'signin',
   data () {
     return {
       loading: false,
+      forgetPassVisible: false,
       form: null,
+      emailValidate: '',
+      validaEmailMsg: '',
+      forgetEmailAdress: '',
       hasErrors (fieldsError) {
         return Object.keys(fieldsError).some(field => fieldsError[field])
       }
@@ -62,6 +69,25 @@ export default {
           this.loading = false
         }
       })
+    },
+    handleOk () {
+      if (this.checkEmail()) {
+        forgotPass(this.forgetEmailAdress).then((data) => {
+          this.$message.success('邮件发送成功， 请注意查收！', 5)
+        }).catch(err => {
+          this.$message.error(err, 5)
+        })
+      }
+    },
+    checkEmail () {
+      if (!this.forgetEmailAdress || !(/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.forgetEmailAdress))) {
+        this.emailValidate = 'error'
+        this.validaEmailMsg = '邮箱格式不正确'
+        return
+      }
+      this.emailValidate = 'success'
+      this.validaEmailMsg = ''
+      return true
     }
   },
   mounted () {

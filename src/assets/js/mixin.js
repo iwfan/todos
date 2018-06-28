@@ -54,15 +54,3 @@ export const ruleMixin = {
     }
   }
 }
-
-export const utilMixin = {
-  methods: {
-    handleError (msg) {
-      this.$alert(msg, '错误', {
-        confirmButtonText: '确定',
-        callback: action => {
-        }
-      })
-    }
-  }
-}
