@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Todos from '@/components/todos'
-import Login from '@/components/login/Login'
+import SignIn from '@/components/signin/signin'
+import SignUp from '@/components/signup/signup'
 import { getCurrentUser } from '@/assets/js/leadCloudUtil'
 Vue.use(Router)
 
@@ -11,28 +12,35 @@ const router = new Router({
     {
       path: '/',
       name: 'todos',
-      component: Todos,
-      beforeEnter (to, from, next) {
-        if (!getCurrentUser()) {
-          next({name: 'login'})
-        } else {
-          next()
-        }
-      }
+      component: Todos
     },
     {
-      path: '/login',
-      name: 'login',
-      component: Login,
-      beforeEnter (to, from, next) {
-        if (getCurrentUser()) {
-          next({name: 'index'})
-        } else {
-          next()
-        }
-      }
+      path: '/signin',
+      name: 'signin',
+      component: SignIn
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: SignUp
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })
-
+router.beforeEach((to, from, next) => {
+  switch (to.path) {
+    case '/':
+      next(getCurrentUser() ? undefined : {name: 'signin'})
+      break
+    case '/signin':
+    case '/signup':
+      next(getCurrentUser() ? {name: 'todos'} : undefined)
+      break
+    default:
+      next()
+  }
+})
 export default router

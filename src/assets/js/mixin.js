@@ -7,99 +7,49 @@ const emailRegExp = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
 
 export const ruleMixin = {
   data () {
-    const vm = this
     return {
-      popTip: {
+      rules: {
         username: {
-          visible: false,
-          message: '名称不合法， 必须是以字母开头，可以包含数字、字母、下划线， 长度在4到20之间。'
-        },
-        email: {
-          visible: false,
-          message: '邮箱格式不合法。'
+          rules: [
+            {
+              trigger: 'onBlur',
+              required: true,
+              validator (rule, value, callback) {
+                if (!value) {
+                  callback(new Error(' '))
+                } else if (usernameRegExp.test(value) || emailRegExp.test(value)) {
+                  callback()
+                } else {
+                  callback(new Error(' '))
+                }
+              },
+              message: '名称格式不正确，必须是以字母开头，可以包含数字、字母、下划线， 长度在4到20之间，或者为正确的邮箱地址。'
+            }
+          ]
         },
         password: {
-          visible: false,
-          message: '密码格式不合法， 必须是以字母开头，可以包含数字、字母， 长度在6到20之间。'
+          rules: [
+            {
+              trigger: 'onBlur',
+              required: true,
+              pattern: passwordRegExp,
+              message: '密码格式不正确， 必须是以字母开头，可以包含数字、字母， 长度在6到20之间。'
+            }
+          ]
         },
-        checkpass: {
-          visible: false,
-          message: '两次输入的密码不一致。'
-        }
-      },
-      rules: {
-        username: [
-          {
-            validator: function (ruler, value, callback) {
-              if (!usernameRegExp.test(value)) {
-                vm.popTip.username.visible = true
-                vm.popTip.password.visible = false
-                vm.popTip.checkpass.visible = false
-                vm.popTip.email.visible = false
-                callback(new Error(' '))
-              } else {
-                vm.popTip.username.visible = false
-                callback()
-              }
-            },
-            required: true,
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          {
-            validator: function (ruler, value, callback) {
-              if (!passwordRegExp.test(value)) {
-                vm.popTip.password.visible = true
-                vm.popTip.username.visible = false
-                vm.popTip.checkpass.visible = false
-                vm.popTip.email.visible = false
-                callback(new Error(' '))
-              } else {
-                vm.popTip.password.visible = false
-                callback()
-              }
-            },
-            required: true,
-            trigger: 'blur'
-          }
-        ],
         checkpass: [
-          {
-            validator: function (ruler, value, callback) {
-              if (!passwordRegExp.test(value) || value !== vm.formData.password) {
-                vm.popTip.checkpass.visible = true
-                vm.popTip.password.visible = false
-                vm.popTip.username.visible = false
-                vm.popTip.email.visible = false
-                callback(new Error(' '))
-              } else {
-                vm.popTip.checkpass.visible = false
-                callback()
-              }
-            },
-            required: true,
-            trigger: 'blur'
-          }
+
         ],
-        email: [
-          {
-            validator: function (ruler, value, callback) {
-              if (!emailRegExp.test(value)) {
-                vm.popTip.email.visible = true
-                vm.popTip.checkpass.visible = false
-                vm.popTip.password.visible = false
-                vm.popTip.username.visible = false
-                callback(new Error(' '))
-              } else {
-                vm.popTip.email.visible = false
-                callback()
-              }
-            },
-            required: true,
-            trigger: 'blur'
-          }
-        ]
+        email: {
+          rules: [
+            {
+              trigger: 'onBlur',
+              required: true,
+              pattern: emailRegExp,
+              message: '邮箱格式不正确'
+            }
+          ]
+        }
       }
     }
   }

@@ -15,18 +15,28 @@ export function getCurrentUser () {
   return AV.User.current()
 }
 
-export function singUp ({username, password, email}) {
-  var user = new AV.User()
+export async function singUp ({username, password, email}) {
+  const user = new AV.User()
   user.setUsername(username)
   user.setPassword(password)
   user.setEmail(email)
-  return user.signUp()
+  try {
+    const loginUser = await user.signUp()
+    return loginUser
+  } catch (exception) {
+    throw exception.rawMessage
+  }
 }
 
-export function login ({username, password}) {
-  return AV.User.logIn(username, password)
+export async function login ({username, password}) {
+  try {
+    const loginedUser = await AV.User.logIn(username, password)
+    return loginedUser
+  } catch (err) {
+    throw err.rawMessage
+  }
 }
-export function logout () {
+export async function logout () {
   AV.User.logOut()
 }
 

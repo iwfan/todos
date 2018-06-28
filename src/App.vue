@@ -1,5 +1,6 @@
-<template>
-  <router-view/>
+<template lang="pug">
+  #todos
+    router-view
 </template>
 
 <script>
@@ -13,12 +14,22 @@ export default {
   box-sizing border-box
 *:focus
   outline none
-html
+html, body, #todos
   height 100%
 body
-  font-family "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif
+  font-family Monospaced Number,Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
-  height 100%
-  color: #202020
+  color: #555
+  background-color: #f1f1f1
+/*
+::-webkit-scrollbar-track
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
+  border-radius: 10px
+*/
+::-webkit-scrollbar
+  width: 6px
+::-webkit-scrollbar-thumb
+  border-radius: 10px
+  background-color: hsla(220, 4%, 58%, .3)
 </style>

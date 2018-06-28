@@ -1,84 +1,104 @@
 <template lang="pug">
-  section
-    article
-      el-form(label-position="left" :model="formData" :rules="rules" ref="singinForm")
-        el-form-item(prop="username")
-          el-popover(placement="bottom" width="250" trigger="manual" v-model="popTip.username.visible" :content="popTip.username.message")
-            el-input(slot="reference" v-model="formData.username" placeholder="请输入用户名" clearable autofocus)
-              template(slot="prefix")
-                icon(name="user" scale="1.2")
-        el-form-item(prop="password")
-          el-popover(placement="bottom" width="250" trigger="manual" v-model="popTip.password.visible" :content="popTip.password.message")
-            el-input(slot="reference" v-model="formData.password" type="password" placeholder="请输入密码")
-              template(slot="prefix")
-                icon(name="unlock-alt" scale="1.2")
-        el-form-item(style="text-align:center")
-          el-button(type="primary" round :loading="loading" @click="signin") 登录
-    footer
-      el-button(size="small" type="text" @click.stop="$message({message:'暂不支持此功能!', type: 'warning'})")
-        icon(name="github" scale="1.5")
-        span Sign In With Github
+  .signin-wrapper
+    .signin-container
+      header.img-box
+        img(src="@/assets/icon.svg" alt="avatar" title="avatar" width="250")
+      .separator
+        span.desc 登录
+      article.login-form
+        section.singin-box
+          a-form(@submit.prevent="signin" refs="signinForm" :autoFormCreate="(form)=>{this.form = form}")
+            template(v-if="form")
+              a-form-item(fieldDecoratorId="username" :fieldDecoratorOptions="rules.username" :hasFeedback="true")
+                a-input(placeholder='用户名或电子邮箱账号' style="height: 40px" autocomplete="off")
+                  a-icon(slot="prefix" type='mail' style="color:#C4C4C4")
+              a-form-item(fieldDecoratorId="password" :fieldDecoratorOptions="rules.password" :hasFeedback="true")
+                a-input(placeholder='密码' style="height: 40px" type='password' autocomplete="off")
+                  a-icon(slot="prefix" type='lock' style="color:#C4C4C4")
+              a-form-item
+                a-button(type='primary' style="width: 100%; height: 40px" htmlType="submit"
+                  icon="login" :loading="loading" :disabled="hasErrors(form.getFieldsError())") 登录
+      .separator
+        span.desc 或许
+      .signup
+        | 还没有账户？
+        router-link(to="/signup") 快速注册
+      .forgot
+        router-link(to="/")
+          a-button(type="danger") 忘记密码?
 </template>
 <script>
 import { login } from '@/assets/js/leadCloudUtil'
-import { ruleMixin, utilMixin } from '@/assets/js/mixin'
+import { ruleMixin } from '@/assets/js/mixin'
 export default {
   name: 'signin',
   data () {
     return {
       loading: false,
-      formData: {
-        username: '',
-        password: ''
+      form: null,
+      hasErrors (fieldsError) {
+        return Object.keys(fieldsError).some(field => fieldsError[field])
       }
     }
   },
   mixins: [
-    ruleMixin,
-    utilMixin
+    ruleMixin
   ],
   methods: {
     signin () {
       this.loading = true
-      this.$refs['singinForm'].validate((valid) => {
-        if (!valid) {
-          return false
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          login(values)
+            .then(() => {
+              this.loading = false
+              this.$router.push('/')
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err, 5)
+            })
+        } else {
+          this.loading = false
         }
-        login(this.formData).then(() => {
-          this.loading = false
-          this.$router.push('/')
-        }).catch(err => {
-          this.loading = false
-          this.handleError(err.rawMessage)
-        })
       })
     }
+  },
+  mounted () {
+    // this.$nextTick(() => {
+    //   // To disabled submit button at the beginning.
+    //   this.form.validateFields()
+    // })
   }
 }
 </script>
 <style lang="stylus" scoped>
-article
-  padding 0 30px
-  .el-input >>> .el-input__prefix
-    top 4px
-    left 8px
-  .el-button
-    width 98%
-footer
-  background-color #f6f6f6
-  border-top 1px solid #dce8f1
-  border-radius 0 0 10px 10px
-  text-align: center
-  padding 10px
-  .el-button
-    color #606266
-    width 98%
-    :hover
-      color #409EFF
-    svg
-      vertical-align top
-    span
-      font-size 14px
-      line-height 24px
-      margin-left 5px
+.signin-wrapper
+  max-width 750px
+  min-width 320px
+  height: 100%
+  margin 0px auto
+  background-color: #fff
+  border 1px solid #ebebeb
+  .signin-container
+    max-width: 350px
+    min-width 300px
+    margin: 0 auto
+    padding 12px
+    .img-box
+      /*padding-top 20px*/
+      text-align center
+    .separator
+      margin 30px 0
+      border-top 1px solid #ddd
+      height 0
+      text-align: center
+      line-height 0px
+      .desc
+        padding 10px
+        background-color #fff
+    .signup,
+    .forgot
+      text-align: center
+      margin 12px 0
 </style>

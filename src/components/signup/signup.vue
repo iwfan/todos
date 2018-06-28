@@ -1,75 +1,107 @@
 <template lang="pug">
-  article
-    el-form(label-position="left" label-width="80px" :model="formData" :rules="rules" ref="singupForm" status-icon)
-      el-form-item(label="用户名" prop="username")
-        el-popover(placement="bottom" width="250" trigger="manual" v-model="popTip.username.visible" :content="popTip.username.message")
-          el-input(slot="reference" v-model.lazy.trim="formData.username" placeholder="请输入用户名" clearable autofocus)
-      el-form-item(label="邮箱" prop="email")
-        el-popover(placement="bottom" width="250" trigger="manual" v-model="popTip.email.visible" :content="popTip.email.message")
-          el-input(slot="reference" v-model.lazy.trim="formData.email" placeholder="请输入邮箱地址" clearable)
-      el-form-item(label="密码" prop="password")
-        el-popover(placement="bottom" width="250" trigger="manual" v-model="popTip.password.visible" :content="popTip.password.message")
-          el-input(slot="reference" v-model.lazy.trim="formData.password" type="password" placeholder="请输入密码" auto-complete="off" clearable)
-      el-form-item(label="确认密码" prop="checkpass")
-        el-popover(placement="bottom" width="250" trigger="manual" v-model="popTip.checkpass.visible" :content="popTip.checkpass.message")
-          el-input(slot="reference" v-model.lazy.trim="formData.checkpass" type="password" placeholder="请再次输入密码" auto-complete="off" clearable)
-      el-form-item(label-width="0" style="text-align:center")
-        el-button(type="primary" :loading="loading" @click="submitForm") 提交
-        el-button(@click="resetForm") 重置
+  .signin-wrapper
+    .signin-container
+      header.img-box
+        img(src="@/assets/icon.svg" alt="avatar" title="avatar" width="250")
+      .separator
+        span.desc 注册
+      article.login-form
+        section.singin-box
+          a-form(@submit.prevent="signup" refs="signinForm" :autoFormCreate="(form)=>{this.form = form}")
+            template(v-if="form")
+              a-form-item(fieldDecoratorId="username" :fieldDecoratorOptions="rules.username" :hasFeedback="true")
+                a-input(placeholder='用户名' style="height: 40px" autocomplete="off")
+                  a-icon(slot="prefix" type='user' style="color:#C4C4C4")
+              a-form-item(fieldDecoratorId="email" :fieldDecoratorOptions="rules.email" :hasFeedback="true")
+                a-input(placeholder='邮箱' style="height: 40px" autocomplete="off")
+                  a-icon(slot="prefix" type='mail' style="color:#C4C4C4")
+              a-form-item(fieldDecoratorId="password" :fieldDecoratorOptions="rules.password" :hasFeedback="true")
+                a-input(placeholder='密码' style="height: 40px" type='password' autocomplete="off")
+                  a-icon(slot="prefix" type='lock' style="color:#C4C4C4")
+              a-form-item(style="text-align: justfiy")
+                a-button(@click="reset" style="width: 35%; height: 40px;float: left ") 重置
+                a-button(type='primary' style="width: 60%; height: 40px;float: right" htmlType="submit"
+                icon="user-add" :loading="loading" :disabled="hasErrors(form.getFieldsError())") 创建账户
+      .separator
+        span.desc 或许
+      .signup
+        | 已有账户？
+        router-link(to="/sign") 去登录
 </template>
 <script>
 import { singUp } from '@/assets/js/leadCloudUtil'
-import { ruleMixin, utilMixin } from '@/assets/js/mixin'
+import { ruleMixin } from '@/assets/js/mixin'
 export default {
   name: 'signup',
   data () {
     return {
-      formData: {
-        username: '',
-        password: '',
-        checkpass: '',
-        email: ''
-      },
-      loading: false
+      loading: false,
+      form: null,
+      hasErrors (fieldsError) {
+        return Object.keys(fieldsError).some(field => fieldsError[field])
+      }
     }
   },
   mixins: [
-    ruleMixin,
-    utilMixin
+    ruleMixin
   ],
   methods: {
-    submitForm () {
+    signup () {
       this.loading = true
-      this.$refs['singupForm'].validate((valid) => {
-        if (!valid) {
-          return false
+      this.form.validateFields((err, values) => {
+        if (!err) {
+          singUp(values)
+            .then(() => {
+              this.loading = false
+              this.$message.success('创建账户成功！ 3秒后进入主页...', 3, () => {
+                this.$router.push('/')
+              })
+            })
+            .catch(err => {
+              this.loading = false
+              this.$message.error(err, 5)
+            })
+        } else {
+          this.loading = false
         }
-        singUp(this.formData).then(() => {
-          this.loading = false
-          this.$notify({
-            title: '成功',
-            message: '注册成功， 5s后进入首页',
-            type: 'success',
-            onClose: () => {
-              this.$router.push('/')
-            }
-          })
-        }).catch(err => {
-          this.loading = false
-          this.handleError(err.rawMessage)
-        })
       })
     },
-    resetForm () {
-      this.$refs['singupForm'].resetFields()
-      for (const key of Object.keys(this.popTip)) {
-        this.popTip[key].visible = false
-      }
+    reset () {
+      this.form.setFieldsValue({
+        username: '',
+        email: '',
+        password: ''
+      })
     }
   }
 }
 </script>
 <style lang="stylus" scoped>
-article
-  padding 0 30px
+  .signin-wrapper
+    max-width 750px
+    min-width 320px
+    height: 100%
+    margin 0px auto
+    background-color: #fff
+    border 1px solid #ebebeb
+    .signin-container
+      max-width: 350px
+      min-width 300px
+      margin: 0 auto
+      padding 12px
+      .img-box
+        /*padding-top 20px*/
+        text-align center
+      .separator
+        margin 30px 0
+        border-top 1px solid #ddd
+        height 0
+        text-align: center
+        line-height 0px
+        .desc
+          padding 10px
+          background-color #fff
+      .signup
+        text-align: center
+        margin 12px 0
 </style>

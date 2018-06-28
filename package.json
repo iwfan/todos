@@ -11,13 +11,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "element-ui": "^2.4.1",
     "leancloud-realtime": "^4.0.1",
     "leancloud-storage": "^3.7.3",
     "lodash": "^4.17.10",
     "normalize.css": "^8.0.0",
     "vue": "^2.5.2",
-    "vue-awesome": "^2.3.7",
+    "vue-antd-ui": "^0.6.3",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
@@ -26,6 +25,7 @@
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-import": "^1.8.0",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
