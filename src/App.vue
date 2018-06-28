@@ -22,11 +22,10 @@ body
   -moz-osx-font-smoothing grayscale
   color: #555
   background-color: #f1f1f1
-/*
-::-webkit-scrollbar-track
+/*::-webkit-scrollbar-track
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
   border-radius: 10px
-*/
+  background-color: rgba(0, 0, 0, .0)*/
 ::-webkit-scrollbar
   width: 6px
 ::-webkit-scrollbar-thumb

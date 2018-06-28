@@ -1,51 +1,18 @@
 <template lang="pug">
-  //.todos
+  .todos
     header.header-wrapper
-      el-row(class="header-container")
+      a-row(class="header-container")
         .header-container__left
           .sider-switch.hidden-sm-and-up
-            i.el-icon-menu
+            a-icon(type="menu-unfold")
           .logo.hidden-xs-only
             a(href="/")
               img(src="../assets/logo.png" width="40")
         .header-container__search
-          el-input(placeholder="快速查找" size="small" auto-complete="off")
         .header-container__right
-          icon(name="user-circle" scale="1.5" style="vertical-align: middle")
-          el-dropdown(trigger="click" size="medium" :hide-on-click="false")
-            span.el-dropdown-link {{ currentUser }}
-              i.el-icon-arrow-down.el-icon--right
-            el-dropdown-menu(slot="dropdown")
-              el-dropdown-item
-                i.el-icon-setting.el-icon--left
-                | 账户管理
-              el-dropdown-item(divided @click.native="logout")
-                i.el-icon-circle-close.el-icon--left
-                | 注销登录
-    .main-wrapper
-      aside.hidden-xs-only
-        el-collapse(:value="['1', '2']" style="border-top: none")
-          el-collapse-item(title="项目" name="1")
-            ul.collapse-item-content
-              li(v-for="item in 5")
-                el-button(icon="el-icon-news" type="text" plain style="border:none; background:none; color: #34495e;") item
-          el-collapse-item(title="标签" name="2")
-            ul.collapse-item-content
-              li(v-for="item in 5")
-                el-button(icon="el-icon-news" type="text" plain style="border:none; background:none; color: #34495e;") item
-      main
-        header
-          el-input(size="medium" placeholder="添加一个代办事项")
-            i.el-icon-date.el-input__icon(slot="suffix")
-            el-button(slot="append" icon="el-icon-plus")
-        section(style="margin-top:30px")
-          el-card(v-for="(item, index) of tableData" :key="index" style="margin: 10px 0;")
-            .clearfix(slot="header") {{ item.address }}
-            el-tag 标签一
-            el-tag(type="success") 标签二
-            el-tag(type="info") 标签三
-            el-tag(type="warning") 标签四
-            el-tag(type="danger") 标签五
+    a-row(class="main-wrapper")
+      a-col(class="aside" sm="0" xs="0" md="8" lg="8" xl="8" xxl="8" span="300px")
+      a-col(class="main")
 </template>
 
 <script>
@@ -91,7 +58,7 @@ export default {
     .header-container
       margin 0 auto
       max-width 950px
-      min-width 350px
+      min-width 320px
       &__left
         float left
         .logo
@@ -118,23 +85,20 @@ export default {
         span
           margin 0 20px 0 10px
   .main-wrapper
-    display: flex
+    /*display: flex*/
     max-width 950px
     min-width 350px
     height: 100%
     margin: 0 auto
     padding-top 50px
-    aside
-      flex: 0 0 300px
-      width 300px
+    .aside
+      /*flex: 0 0 300px*/
+      /*width 300px*/
+      background-color: red
       height 100%
       padding 10px 0 0 20px
-      .el-collapse-item
-        & >>> .el-collapse-item__header,
-        & >>> .el-collapse-item__wrap
-          background-color rgba(0, 0, 0, .0)
-    main
-      flex: 1
+    .main
+      /*flex: 1*/
       height 100%
       padding 20px
       background-color: #fff
