@@ -1,5 +1,6 @@
 import AV from 'leancloud-storage'
 const TodoFolder = AV.Object.extend('TodoFolder')
+const TodoTag = AV.Object.extend('TodoTag')
 // const Todo = AV.Object.extend('Todo')
 
 export function init () {
@@ -61,6 +62,7 @@ export async function forgotPass (email) {
 }
 
 export function addFolder ({name, priority}) {
+  // 不能超过50个
   const folder = new TodoFolder()
   folder.set('name', name)
   folder.set('priority', priority)
@@ -69,4 +71,58 @@ export function addFolder ({name, priority}) {
   }, function (error) {
     console.error(error)
   })
+}
+
+export async function fetchAllFolderAndTag () {
+  var result = {folders: [], tags: []}
+  var query = new AV.Query('TodoFolder')
+  query.select(['name'])
+  query.equalTo('owner', getCurrentUser())
+  query.include('owner')
+  query.ascending('createdAt')
+  var query1 = new AV.Query('TodoTag')
+  query1.select(['name'])
+  query1.equalTo('owner', getCurrentUser())
+  query1.include('owner')
+  query1.ascending('createdAt')
+
+  try {
+    const folders = await query.find()
+    if (folders && folders.length) {
+      [].map.call(folders, fold => result.folders.push({id: fold.id, name: fold.get('name')}))
+    }
+    const tags = await query1.find()
+    if (tags && tags.length) {
+      [].map.call(tags, tag => result.tags.push({id: tag.id, name: tag.get('name')}))
+    }
+  } catch (exception) {
+    throw exception.rawMessage
+  }
+  return result
+}
+
+export async function fillData () {
+  const folder = ['个人计划', '工作任务', '学习任务', '临时记录', '杂项']
+  const tags = ['待重构', '任务中', 'test', '日常']
+  const objects = []
+  for (const key of folder) {
+    let fold = new TodoFolder()
+    fold.set('name', key)
+    fold.set('owner', getCurrentUser())
+    objects.push(fold)
+  }
+
+  for (const key of tags) {
+    let tag = new TodoTag()
+    tag.set('name', key)
+    tag.set('owner', getCurrentUser())
+    objects.push(tag)
+  }
+
+  try {
+    const result = await AV.Object.saveAll(objects)
+    return result
+  } catch (exception) {
+    throw exception.rawMessage
+  }
 }

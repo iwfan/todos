@@ -1,10 +1,10 @@
 <template lang="pug">
-  .todos
+  .todos(v-cloak)
     header.header-wrapper
       .header-container
         .header-container__left
-          .side-switch.hidden-md-and-up
-            a-icon(type="menu-unfold")
+          .side-switch.hidden-md-and-up(@click="switchSideBar")
+            a-icon(:type="sideBarVisible ? 'menu-fold' : 'menu-unfold'")
           .logo.hidden-md-and-down
             a(href="/")
               img(src="../assets/logo.png" width="40")
@@ -22,18 +22,42 @@
                     | 注销登录
               a-icon(type="appstore")
         .header-container__middle
-          a-input
+          //a-input
     article.main-wrapper
-      aside.side-box.hidden-md-and-down
+      aside.side-box(:style="{'left': sideBarOffsetX}")
+        a-collapse(:bordered="false" :activeKey="['0', '1']" style="background: none;")
+          a-collapse-panel(v-for="(type, index) of [{name: '项目', data: 'folders', icon: 'bulb'}, {name: '标签', data: 'tags', icon: 'pushpin-o'}]" :key="index")
+            template(slot="header")
+              span(style="font-weight: bolder") {{ type.name }}
+              a-icon(type="plus" style="float: right;padding: 3px 15px;font-size: 16px" @click.native.stop="addFolder(type.data)")
+            template(v-if="remote[type.data]")
+              a-list(itemLayout="horizontal" :dataSource="remote[type.data]")
+                a-list-item.fold-item(slot="renderItem" slot-scope="item, index"
+                  style="border: none; padding: 12px 20px 12px 30px"
+                  @click.native.stop="selectFolder(type.data, item.id)")
+                  a-icon.icon(:type="type.icon" style="padding: 3px 10px;")
+                  span.name {{ item.name }}
+                  a-icon.del(type="delete" style="padding: 3px 10px;color: #DB483E" @click.native.stop="delFolder(type.data, item.id)")
+            template(v-else)
+              a-spin(size="large")
       main.main-box
 </template>
 
 <script>
-import { logout, getCurrentUser } from '@/assets/js/leadCloudUtil'
+import { logout
+  , getCurrentUser
+  , fetchAllFolderAndTag
+} from '@/assets/js/leadCloudUtil'
 export default {
   name: 'todos',
   data () {
     return {
+      sideBarVisible: false,
+      sideBarOffsetX: '-320px',
+      remote: {
+        folders: null,
+        tags: null
+      }
     }
   },
   methods: {
@@ -41,10 +65,31 @@ export default {
       logout().then(() => {
         this.$router.push('/signin')
       })
+    },
+    switchSideBar () {
+      if (this.sideBarVisible) {
+        this.sideBarOffsetX = '-320px'
+      } else {
+        this.sideBarOffsetX = '0'
+      }
+      this.sideBarVisible = !this.sideBarVisible
+    },
+    addFolder (type) {
+      console.log(type)
+    },
+    selectFolder (type, id) {
+      console.log('select', type, id)
+    },
+    delFolder (type, id) {
+      console.log(type, id)
     }
   },
   created () {
     this.currentUser = getCurrentUser().get('nickname')
+    fetchAllFolderAndTag().then(({folders, tags}) => {
+      this.remote.folders = folders
+      this.remote.tags = tags
+    }).catch(err => this.$message.error(err))
   }
 }
 </script>
@@ -59,16 +104,8 @@ export default {
 </style>
 
 <style lang="stylus" scoped>
-.pop-menu-item
-  display block
-  width: 100%
-  &:first-child
-    padding 0 0 10px 0
-  &:last-child
-    padding 10px 0 0px 0
-  cursor: pointer
-  &:hover
-    color: #1890ff
+[v-cloak]
+  display none
 .todos
   height: 100%
   background-color: #fafafa
@@ -94,16 +131,12 @@ export default {
         float left
         .logo
           padding 5px 10px 5px 20px
-          /*width 300px*/
         .side-switch
           line-height 50px
           padding 0 20px
+          cursor pointer
       &__middle
-        /*float left*/
-        /*width: 100%*/
-        background-color: red
-        margin-left 320px
-        /*height: 50px*/
+        float right
       &__right
         float: right
         padding 0 10px
@@ -120,14 +153,47 @@ export default {
     margin: 0 auto
     padding-top 50px
     .side-box
-      flex: 0 0 300px
       width 300px
-      background-color: #5fbae9
+      background-color: #fafafa
       height 100%
       padding 10px 0 0 20px
+      transition all .4s linear
     .main-box
       flex: 1
       height 100%
       padding 20px
       background-color: #fff
+@media (max-width: 767.98px)
+  .todos
+    .side-box
+      position: fixed
+      z-index 100
+      left -320px
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3)
+      transition all .4s linear
+.pop-menu-item
+  display block
+  width: 100%
+  &:first-child
+    padding 0 0 10px 0
+  &:last-child
+    padding 10px 0 0px 0
+  cursor: pointer
+  &:hover
+    color: #1890ff
+.fold-item
+  cursor pointer
+  position relative
+  .del
+    position absolute
+    right 10px
+    display none
+  &:hover
+    .icon
+      /*color #fadb14*/
+      color #1890ff
+    .name
+      color: #1890ff
+    .del
+      display inline-block
 </style>
