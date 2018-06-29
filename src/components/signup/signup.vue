@@ -92,6 +92,10 @@ export default {
         .img-box
           img
             width: 150px
+        .separator
+          margin 25px 0 !important
+        .ant-form-item
+          margin-bottom 15px
   .signin-wrapper
     max-width 750px
     min-width 320px
