@@ -86,6 +86,12 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+  @media (max-width: 767.98px)
+    .signin-wrapper
+      .signin-container
+        .img-box
+          img
+            width: 150px
   .signin-wrapper
     max-width 750px
     min-width 320px
