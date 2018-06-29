@@ -25,8 +25,8 @@
           //a-input
     article.main-wrapper
       aside.side-box(:style="{'left': sideBarOffsetX}")
-        a-collapse(:bordered="false" :activeKey="['0', '1']" style="background: none;")
-          a-collapse-panel(v-for="(type, index) of [{name: '项目', data: 'folders', icon: 'bulb'}, {name: '标签', data: 'tags', icon: 'pushpin-o'}]" :key="index")
+        a-collapse(:bordered="false" :activeKey="['folders', 'tags']" style="background: none;")
+          a-collapse-panel(v-for="(type, index) of [{name: '项目', data: 'folders', icon: 'bulb'}, {name: '标签', data: 'tags', icon: 'pushpin-o'}]" :key="type.data")
             template(slot="header")
               span(style="font-weight: bolder") {{ type.name }}
               a-icon(type="plus" style="float: right;padding: 3px 15px;font-size: 16px" @click.native.stop="addFolder(type.data)")
@@ -37,7 +37,8 @@
                   @click.native.stop="selectFolder(type.data, item.id)")
                   a-icon.icon(:type="type.icon" style="padding: 3px 10px;")
                   span.name {{ item.name }}
-                  a-icon.del(type="delete" style="padding: 3px 10px;color: #DB483E" @click.native.stop="delFolder(type.data, item.id)")
+                  a-popconfirm(title="确定删除该记录吗?" placement="bottom" okText="确定" cancelText="取消" @confirm="delFolder(type.data, item.id)")
+                    a-icon.del(type="delete" style="padding: 3px 10px;color: #DB483E" @click.native.stop="void(0)")
             template(v-else)
               a-spin(size="large")
       main.main-box
@@ -156,7 +157,7 @@ export default {
       width 300px
       background-color: #fafafa
       height 100%
-      padding 10px 0 0 20px
+      padding 10px 0 0 5px
       transition all .4s linear
     .main-box
       flex: 1
