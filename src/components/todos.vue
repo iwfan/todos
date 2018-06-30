@@ -60,19 +60,27 @@
         header.input-wrapper
           a-input(placeholder="皮皮皮")
             a-icon(slot="prefix" type="flag" style="color:#C4C4C4")
+        a-divider(style="font-weight: bolder; color: #ccc;") TODOS
         article.todos-wrapper
           template(v-if="remote.todos")
             a-list(itemLayout="horizontal" :dataSource="remote.todos")
               a-list-item(slot="renderItem" slot-scope="item, index" style="padding-bottom: 5px;")
                 a-collapse(:bordered="false" style="width:100%")
                   a-collapse-panel(:key="item.id" :showArrow="false" style="border: none")
-                    template(slot="header") {{ item.title }}
+                    template(slot="header")
+                      .todo-check-wrapper
+                        lottie.lottie-todo-check(:options="lottie.check" :height="100" :width="100"
+                        v-on:animCreated="(anim) => { remote.todos[item.id].$anim = anim}"
+                        @click.native.stop="checkTodo(item.id)")
+                      .todo-title-wrapper
+                        span  {{ item.title }} {{ item.id }}
                     p Ant Design, a design language for background applications, is refined by Ant UED Team
                 //a-list-item-meta(description="Ant Design, a design language for background applications, is refined by Ant UED Team")
                   a(slot="title" href="https://vuecomponent.github.io/ant-design/") {{ item.title }}
                   a-avatar(slot="avatar" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png")
           template(v-else)
             a-spin(size="large" style="width:100%;margin-top: 50px")
+        a-divider(style="font-weight: bolder; color: #ccc;") TODOS
 </template>
 
 <script>
@@ -85,6 +93,7 @@ import Lottie from 'vue-lottie'
 import * as animationData from '@/assets/lottie/animation_2.json'
 import * as boxAnimationData from '@/assets/lottie/material_box_loader.json'
 import * as avatarAnimationData from '@/assets/lottie/not_found.json'
+import * as checkAnimationData from '@/assets/lottie/checkmark_animation.json'
 export default {
   name: 'todos',
   data () {
@@ -102,6 +111,11 @@ export default {
         },
         avatar: {
           animationData: avatarAnimationData
+        },
+        check: {
+          animationData: checkAnimationData,
+          loop: false,
+          autoplay: false
         }
       },
       sideBarVisible: false,
@@ -155,6 +169,16 @@ export default {
     },
     onMenuSelect () {
       console.log(arguments)
+    },
+    checkTodo (id) {
+      console.log(id, this.remote.todos[id])
+      let todo = this.remote.todos[id]
+      if (todo.status) {
+        todo.$anim.goToAndStop(0)
+      } else {
+        todo.$anim.playSegments([5, 25], true)
+      }
+      todo.status = !todo.status
     }
   },
   created () {
@@ -164,7 +188,8 @@ export default {
       this.remote.tags = tags
       this.remote.todos = Array.from({length: 10}).map((item, index) => ({
         id: index,
-        title: 'test_test_test'
+        title: 'test_test_test',
+        status: false
       }))
     }).catch(err => this.$message.error(err))
   },
@@ -176,6 +201,8 @@ export default {
 <style lang="stylus">
   .ant-menu
     background: none !important
+  .ant-collapse-header
+    cursor default !important
 </style>
 <style lang="stylus">
 @media (max-width: 767.98px)
@@ -266,6 +293,27 @@ export default {
       padding 20px
       background-color: #fff
       overflow auto
+      .input-wrapper
+        margin-bottom 10px
+      .todos-wrapper
+        position: relative
+        top: -27px
+        .todo-check-wrapper
+          display inline-block
+          width: 40px
+          height: 40px
+          overflow hidden
+          cursor pointer
+          .lottie-todo-check
+            position: relative
+            top: -30px
+            left: -32px
+        .todo-title-wrapper
+          display inline-block
+          height 40px
+          line-height 40px
+          vertical-align top
+          margin-left 10px
 @media (max-width: 767.98px)
   .todos
     .side-box
