@@ -3822,6 +3822,10 @@ loose-envify@^1.0.0:
   dependencies:
     js-tokens "^3.0.0"
 
+lottie-web@^5.1.9:
+  version "5.1.18"
+  resolved "http://registry.npm.taobao.org/lottie-web/download/lottie-web-5.1.18.tgz#e026619302caf83eee4edf72bb81add415da2604"
+
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/loud-rejection/download/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
@@ -6388,6 +6392,12 @@ vue-loader@^13.3.0:
     vue-hot-reload-api "^2.2.0"
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
+
+vue-lottie@^0.2.1:
+  version "0.2.1"
+  resolved "http://registry.npm.taobao.org/vue-lottie/download/vue-lottie-0.2.1.tgz#f9f62c34a276e6834255406118fb05b51f765e4b"
+  dependencies:
+    lottie-web "^5.1.9"
 
 vue-router@^3.0.1:
   version "3.0.1"

@@ -108,7 +108,7 @@ export default {
 .signin-wrapper
   max-width 750px
   min-width 320px
-  height: 100%
+  min-height: 100%
   margin 0px auto
   background-color: #fff
   border 1px solid #ebebeb

@@ -74,7 +74,7 @@ export function addFolder ({name, priority}) {
 }
 
 export async function fetchAllFolderAndTag () {
-  var result = {folders: [], tags: []}
+  var result = {folders: [], tags: [], todos: []}
   var query = new AV.Query('TodoFolder')
   query.select(['name'])
   query.equalTo('owner', getCurrentUser())
@@ -89,11 +89,11 @@ export async function fetchAllFolderAndTag () {
   try {
     const folders = await query.find()
     if (folders && folders.length) {
-      [].map.call(folders, fold => result.folders.push({id: fold.id, name: fold.get('name')}))
+      [].map.call(folders, fold => result.folders.push({id: fold.id, name: fold.get('name'), icon: 'bulb'}))
     }
     const tags = await query1.find()
     if (tags && tags.length) {
-      [].map.call(tags, tag => result.tags.push({id: tag.id, name: tag.get('name')}))
+      [].map.call(tags, tag => result.tags.push({id: tag.id, name: tag.get('name'), icon: 'pushpin'}))
     }
   } catch (exception) {
     throw exception.rawMessage
