@@ -58,8 +58,10 @@
           a-spin(size="large" style="width:100%;margin-top: 50px")
       main.main-box
         header.input-wrapper
-          a-input(placeholder="皮皮皮")
+          //a-input-group(compact)
+          a-input(placeholder="皮皮皮" style="width: 50%" enterButton)
             a-icon(slot="prefix" type="flag" style="color:#C4C4C4")
+          a-date-picker
         a-divider(style="font-weight: bolder; color: #ccc;") TODOS
         article.todos-wrapper
           template(v-if="remote.todos")
@@ -67,7 +69,7 @@
               a-list-item(slot="renderItem" slot-scope="item, index" style="padding-bottom: 5px;")
                 a-collapse(:bordered="false" style="width:100%")
                   a-collapse-panel(:key="item.id" :showArrow="false" style="border: none")
-                    template(slot="header")
+                    template(slot="header" @click.native.stop="void(0)")
                       .todo-check-wrapper
                         lottie.lottie-todo-check(:options="lottie.check" :height="100" :width="100"
                         v-on:animCreated="(anim) => { remote.todos[item.id].$anim = anim}"
@@ -203,6 +205,9 @@ export default {
     background: none !important
   .ant-collapse-header
     cursor default !important
+    padding 0 !important
+  .ant-list-item
+    /*padding 0 !important*/
 </style>
 <style lang="stylus">
 @media (max-width: 767.98px)
