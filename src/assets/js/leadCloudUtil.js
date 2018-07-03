@@ -3,6 +3,9 @@ const TodoFolder = AV.Object.extend('TodoFolder')
 const TodoTag = AV.Object.extend('TodoTag')
 // const Todo = AV.Object.extend('Todo')
 
+// 当前用户
+let currentUser = null
+
 export function init () {
   const APPID = 'PwJpIXfhKL1WH0QDmdutG9Eb-gzGzoHsz'
   const APPKEY = 'RPeMx26ScrwDY2Iutozf2vR1'
@@ -10,10 +13,15 @@ export function init () {
   if (process.env.NODE_ENV === 'development') {
     localStorage.setItem('debug', 'leancloud*')
   }
+  debugger
+  const user = AV.User.current()
+  if (user && user.isAuthenticated()) {
+    currentUser = user
+  }
 }
 
 export function getCurrentUser () {
-  return AV.User.current()
+  return currentUser
 }
 
 export async function hasUser (code) {
@@ -44,12 +52,15 @@ export async function singUp ({username, password, email}) {
 export async function login ({username, password}) {
   try {
     const loginedUser = await AV.User.logIn(username, password)
+    loginedUser.refreshSessionToken()
+    currentUser = loginedUser
     return loginedUser
   } catch (err) {
     throw err.rawMessage
   }
 }
 export async function logout () {
+  currentUser = null
   await AV.User.logOut()
 }
 
