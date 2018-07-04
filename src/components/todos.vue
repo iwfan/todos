@@ -184,12 +184,7 @@ export default {
     }
   },
   created () {
-    debugger
     var user = getCurrentUser()
-    if (!user) {
-      this.$router.push('/signin')
-      return
-    }
     this.currentUser = user.get('nickname')
     fetchAllFolderAndTag().then(({folders, tags}) => {
       this.remote.folders = folders

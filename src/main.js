@@ -162,12 +162,12 @@ Vue.prototype.$confirm = Modal.confirm
 
 Vue.config.productionTip = false
 // leancloud init
-init()
-// logout()
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+init().then(() => {
+  /* eslint-disable no-new */
+  new Vue({
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
+  })
 })

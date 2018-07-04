@@ -6,16 +6,15 @@ const TodoTag = AV.Object.extend('TodoTag')
 // 当前用户
 let currentUser = null
 
-export function init () {
+export async function init () {
   const APPID = 'PwJpIXfhKL1WH0QDmdutG9Eb-gzGzoHsz'
   const APPKEY = 'RPeMx26ScrwDY2Iutozf2vR1'
   AV.init({ appId: APPID, appKey: APPKEY })
   if (process.env.NODE_ENV === 'development') {
     localStorage.setItem('debug', 'leancloud*')
   }
-  debugger
   const user = AV.User.current()
-  if (user && user.isAuthenticated()) {
+  if (user && await user.isAuthenticated()) {
     currentUser = user
   }
 }
@@ -43,6 +42,7 @@ export async function singUp ({username, password, email}) {
   user.set('nickname', username)
   try {
     const loginUser = await user.signUp()
+    currentUser = loginUser
     return loginUser
   } catch (exception) {
     throw exception.rawMessage
@@ -52,7 +52,7 @@ export async function singUp ({username, password, email}) {
 export async function login ({username, password}) {
   try {
     const loginedUser = await AV.User.logIn(username, password)
-    loginedUser.refreshSessionToken()
+    await loginedUser.refreshSessionToken()
     currentUser = loginedUser
     return loginedUser
   } catch (err) {
