@@ -4,10 +4,12 @@
       .header-container
         .header-container__left
           .side-switch.hidden-md-and-up(@click="switchSideBar")
-            lottie(:options="lottie.fold" :height="50" :width="80" @click.native.stop="switchSideBar" v-on:animCreated="(anim) => { this.lottie.fold.$anim = anim}")
+            .switch-wrapper(@click.stop="switchSideBar")
+              lottie.switch-box(:options="lottie.fold" :height="80" :width="80" v-on:animCreated="(anim) => { this.lottie.fold.$anim = anim}")
           .logo.hidden-md-and-down
             a(href="/")
-              img(src="../assets/logo.png" width="40")
+              img(src="../assets/logo/todo.png" width="40")
+              span Todos
         .header-container__right
           .control
             a-tooltip(placement="bottom")
@@ -58,10 +60,15 @@
           a-spin(size="large" style="width:100%;margin-top: 50px")
       main.main-box
         header.input-wrapper
-          //a-input-group(compact)
-          a-input(placeholder="皮皮皮" style="width: 50%" enterButton)
-            a-icon(slot="prefix" type="flag" style="color:#C4C4C4")
-          a-date-picker
+            a-input(placeholder="皮皮皮" style="width: 50%" enterButton)
+              a-icon(slot="addonBefore" type="flag" style="color:#C4C4C4")
+              template(slot="addonAfter")
+                span
+                  a-icon(type="calendar")
+                span
+                  a-icon(type="book")
+                span
+                  a-icon(type="tag-o")
         a-divider(style="font-weight: bolder; color: #ccc;") TODOS
         article.todos-wrapper
           template(v-if="remote.todos")
@@ -248,10 +255,27 @@ export default {
         float left
         .logo
           padding 5px 10px 5px 20px
+          a
+            display block
+            width 100%
+            height 100%
+            span
+              font-size 20px
+              font-weight bolder
+              vertical-align middle
+              margin-left 5px
         .side-switch
-          line-height 50px
           /*padding 0 20px*/
+          height 50px
           cursor pointer
+          .switch-wrapper
+            height 50px
+            width 50px
+            display inline-block
+            .switch-box
+              position relative
+              top: -15px
+              left -15px
       &__middle
         float right
       &__right
