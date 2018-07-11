@@ -1,7 +1,9 @@
 import AV from 'leancloud-storage'
 const TodoFolder = AV.Object.extend('TodoFolder')
+const Todo = AV.Object.extend('Todo')
 const TodoTag = AV.Object.extend('TodoTag')
-// const Todo = AV.Object.extend('Todo')
+// Todo 与 Tag 是多对多的关系， 使用关联表存储
+const TodoTagMap = AV.Object.extend('TodoTagMap')
 
 // 当前用户
 let currentUser = null
@@ -82,6 +84,42 @@ export function addFolder ({name, priority}) {
   }, function (error) {
     console.error(error)
   })
+}
+
+export async function addTodo () {
+  var todo = new Todo()
+  todo.set('title', '代办一')
+  todo.set('content', '内容')
+  todo.set('createDate', new Date())
+  todo.set('tag', 1)
+  let result = await todo.save()
+  return result
+}
+
+export async function fillTodoData () {
+  console.log(1)
+  async function save() {
+    var tag1 = AV.Object.createWithoutData('TodoTag', '5b35ebf8ee920a003a0f7279')
+    var tag2 = AV.Object.createWithoutData('TodoTag', '5b35ebf8ee920a003a0f7277')
+    var folder = AV.Object.createWithoutData('TodoFolder', '5b35ebf8ee920a003a0f7272')
+
+    var todo = new Todo()
+    todo.set('title', 'test1')
+    todo.set('content', 'test content')
+    todo.set('folder', folder)
+    await todo.save()
+    var todoTag = new TodoTagMap()
+    todoTag.set('todo', todo)
+    todoTag.set('tag', tag1)
+    await todoTag.save()
+    var todoTag1 = new TodoTagMap()
+    todoTag1.set('todo', todo)
+    todoTag1.set('tag', tag2)
+    await todoTag1.save()
+    // AV.Object.saveAll([todo, todoTag, todoTag1])
+  }
+  // save()
+  console.log(save)
 }
 
 export async function fetchAllFolderAndTag () {

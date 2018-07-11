@@ -96,6 +96,7 @@
 import { logout
   , getCurrentUser
   , fetchAllFolderAndTag
+  , fillTodoData
 } from '@/assets/js/leadCloudUtil'
 
 import Lottie from 'vue-lottie'
@@ -202,6 +203,7 @@ export default {
         status: false
       }))
     }).catch(err => this.$message.error(err))
+    fillTodoData()
   },
   components: {
     Lottie
