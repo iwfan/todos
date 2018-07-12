@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Todos from '@/components/todos'
 import SignIn from '@/components/signin/signin'
 import SignUp from '@/components/signup/signup'
-import { getCurrentUser } from '@/assets/js/leadCloudUtil'
+import { getCurrentUser } from '@/leancloudAPI'
 Vue.use(Router)
 
 const router = new Router({

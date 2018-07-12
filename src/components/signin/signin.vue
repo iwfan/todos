@@ -31,7 +31,7 @@
               a-icon(slot="prefix" type='mail' style="color:#C4C4C4")
 </template>
 <script>
-import { login, forgotPass } from '@/assets/js/leadCloudUtil'
+import { login, forgotPass } from '@/leancloudAPI'
 import { ruleMixin } from '@/assets/js/mixin'
 export default {
   name: 'signin',
