@@ -15,3 +15,7 @@ export async function init() {
 export { getCurrentUser, hasUser, login, logout, singUp, forgotPass } from './User'
 
 export { addCategories, updateCategories, deleteCategories, findCategories } from './Categories'
+
+export { addTag, updateTag, deleteTag, findTag } from './Tag'
+
+export { addTodo, updateTodo, deleteTodo, findTodo } from './Todo'

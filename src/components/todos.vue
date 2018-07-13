@@ -97,6 +97,10 @@ import { logout
   , getCurrentUser
   , addCategories
   , findCategories
+  , addTag
+  , findTag
+  , addTodo
+  , findTodo
   // , fetchAllFolderAndTag
   // , fillTodoData
 } from '@/leancloudAPI'
@@ -196,23 +200,13 @@ export default {
   created () {
     var user = getCurrentUser()
     this.currentUser = user.get('nickname')
-    // fetchAllFolderAndTag().then(({folders, tags, todos}) => {
-    //   console.log(todos)
-    //   this.remote.folders = folders
-    //   this.remote.tags = tags
-    //   this.remote.todos = Array.from({length: 10}).map((item, index) => ({
-    //     id: index,
-    //     title: 'test_test_test',
-    //     status: false
-    //   }))
-    // }).catch(err => this.$message.error(err))
-    // fillTodoData()
-    debugger
-    // addCategories('分类一', 1)
-    // addCategories('分类二', 2)
-    findCategories().then(data => {
-      console.log(data)
-    })
+    console.log(addCategories, addTag, addTodo, findTodo)
+    Promise.all([findCategories(), findTag(), findTodo()])
+      .then(([categories, tags, todos]) => {
+        console.log(categories)
+        console.log(tags)
+        console.log(todos)
+      })
   },
   components: {
     Lottie
