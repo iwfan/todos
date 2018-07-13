@@ -95,8 +95,11 @@
 <script>
 import { logout
   , getCurrentUser
-  , fetchAllFolderAndTag
-} from '@/assets/js/leadCloudUtil'
+  , addCategories
+  , findCategories
+  // , fetchAllFolderAndTag
+  // , fillTodoData
+} from '@/leancloudAPI'
 
 import Lottie from 'vue-lottie'
 import * as animationData from '@/assets/lottie/animation_2.json'
@@ -193,15 +196,23 @@ export default {
   created () {
     var user = getCurrentUser()
     this.currentUser = user.get('nickname')
-    fetchAllFolderAndTag().then(({folders, tags}) => {
-      this.remote.folders = folders
-      this.remote.tags = tags
-      this.remote.todos = Array.from({length: 10}).map((item, index) => ({
-        id: index,
-        title: 'test_test_test',
-        status: false
-      }))
-    }).catch(err => this.$message.error(err))
+    // fetchAllFolderAndTag().then(({folders, tags, todos}) => {
+    //   console.log(todos)
+    //   this.remote.folders = folders
+    //   this.remote.tags = tags
+    //   this.remote.todos = Array.from({length: 10}).map((item, index) => ({
+    //     id: index,
+    //     title: 'test_test_test',
+    //     status: false
+    //   }))
+    // }).catch(err => this.$message.error(err))
+    // fillTodoData()
+    debugger
+    // addCategories('分类一', 1)
+    // addCategories('分类二', 2)
+    findCategories().then(data => {
+      console.log(data)
+    })
   },
   components: {
     Lottie
