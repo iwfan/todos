@@ -4,6 +4,7 @@
 </template>
 
 <script>
+import { logout } from '@/leancloudAPI'
 export default {
   name: 'frame',
   data() {
@@ -11,6 +12,8 @@ export default {
   },
   methods: {
     logout() {
+      logout()
+      this.$router.push({ name: 'signin' })
     }
   }
 }

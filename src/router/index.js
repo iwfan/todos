@@ -71,10 +71,10 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   switch (true) {
     case /^\/index/.test(to.path):
-      next(getCurrentUser() ? undefined : {name: 'account'})
+      next(getCurrentUser() ? undefined : { name: 'signin' })
       break
     case /^\/account/.test(to.path):
-      next(getCurrentUser() ? {name: '/index'} : undefined)
+      next(getCurrentUser() ? { name: 'index' } : undefined)
       break
     default:
       next()

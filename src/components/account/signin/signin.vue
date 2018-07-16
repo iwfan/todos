@@ -17,23 +17,25 @@
           label="输入您的密码"
           id="password"
           :type="showpasswd ? 'text' : 'password'"
-          :append-icon="showpasswd ? 'visibility_off' : 'visibility'"
+          :append-icon="showpasswd ? 'visibility' : 'visibility_off'"
           v-on:click:append="showpasswd = !showpasswd")
       v-btn(color="primary" tabindex="-1" flat @click.native.stop="$router.push('/account/reset')") 忘记了账户密码？
     v-card-actions
       v-btn(color="primary" tabindex="-1" flat @click="$router.push('/account/signup')") 创建账号
       v-spacer
-      v-btn(color="primary" @click="doLogin") 登录
+      v-btn(color="primary" @click="doLogin" :loading="showLoading") 登录
 </template>
 
 <script>
 import rulesMixin from '@/mixin/validateRule'
+import { login } from '@/leancloudAPI'
 export default {
   name: 'signin',
   data() {
     return {
       valid: true,
       showpasswd: false,
+      showLoading: false,
       form: {
         username: '',
         password: ''
@@ -43,7 +45,14 @@ export default {
   methods: {
     doLogin() {
       if (this.$refs.form.validate()) {
-        console.log(this.form)
+        this.showLoading = true
+        login(this.form).then(() => {
+          this.$router.push('/index')
+        }).catch(err => {
+          this.$emit('toast', 'error', err)
+        }).finally(() => {
+          this.showLoading = false
+        })
       }
     }
   },

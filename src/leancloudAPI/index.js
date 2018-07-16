@@ -12,7 +12,7 @@ export async function init() {
   return user
 }
 
-export { getCurrentUser, hasUser, login, logout, singUp, forgotPass } from './User'
+export { getCurrentUser, hasUser, login, logout, signUp, forgotPass } from './User'
 
 export { addCategories, updateCategories, deleteCategories, findCategories } from './Categories'
 

@@ -6,12 +6,33 @@
           v-flex.account-wrapper
             v-card.account-box
               v-card-media(src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px")
-              router-view
+              router-view(@toast="showToast")
+    v-snackbar(v-model="showSnackBar"
+      v-bind:color="type"
+      v-bind:timeout="4000"
+      left
+      bottom
+      v-bind:text="msg"
+    ) {{ msg }}
 </template>
 
 <script>
 export default {
-  name: 'account'
+  name: 'account',
+  data() {
+    return {
+      showSnackBar: false,
+      msg: '',
+      type: ''
+    }
+  },
+  methods: {
+    showToast(type, msg) {
+      this.showSnackBar = true
+      this.type = type
+      this.msg = msg
+    }
+  }
 }
 </script>
 
@@ -24,10 +45,12 @@ export default {
 
 <style lang="stylus" data-role-type="normal">
 .normal
-  .account-box
-    max-width 450px
-    padding 0 0 10px
-    border-radius 10px
+  .account-wrapper
+    transform: translateY(-100px);
+    .account-box
+      max-width 450px
+      padding 0 0 10px
+      // border-radius 10px
 </style>
 
 <style lang="stylus" data-role-type="mini">

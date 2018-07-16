@@ -24,12 +24,12 @@ export async function hasUser(code) {
   try {
     hasU = await query.get(code)
   } catch (exception) {
-    throw getErrorMessage(exception)
+    throw getErrorMessage('无效的邀请码')
   }
   return hasU
 }
 
-export async function singUp({ username, password, email }) {
+export async function signUp({ username, password, email }) {
   const user = new AV.User()
   user.setUsername(username)
   user.setPassword(password)

@@ -11,8 +11,10 @@ const Todo = AV.Object.extend(TODO)
 const TodoTag = AV.Object.extend(TODOTAG)
 // 获取错误消息
 const getErrorMessage = err => {
-  console.error(err)
-  return (err.rawMessage) || (err.message) || (err.stack)
+  if (process.env.NODE_ENV === 'development') {
+    console.error(err)
+  }
+  return (err.rawMessage) || (err.message) || (err.stack) || err
 }
 
 export { AV, APPID, APPKEY, CATEGORIES, TAG, TODO, TODOTAG, Categories, Tag, Todo, TodoTag, getErrorMessage }
