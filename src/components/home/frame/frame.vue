@@ -27,6 +27,7 @@ export default {
   name: 'frame',
   data() {
     return {
+      // TODO  移动端适配
       fold: true,
       fab: false
     }
