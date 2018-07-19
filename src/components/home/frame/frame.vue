@@ -1,73 +1,34 @@
 <template lang="pug">
-  v-app
-    v-navigation-drawer(app fixed clipped v-model="drawer" mobile-break-point="768" width="250")
-      v-list.pt-3(dense)
-        template(v-for="(item, i) in items")
-          v-layout(
-            row
-            v-if="item.heading"
-            align-center
-            :key="i")
-            v-flex(xs6)
-              v-subheader(v-if="item.heading") {{ item.heading }}
-            v-flex(xs6 class="text-xs-right")
-              v-btn(small flat) edit
-          v-divider(
-            v-else-if="item.divider"
-            class="my-3"
-            :key="i")
-          v-list-tile(
-            :key="i"
-            v-else
-            @click="")
-            v-list-tile-action
-              v-icon {{ item.icon }}
-            v-list-tile-content
-              v-list-tile-title {{ item.text }}
-    v-toolbar(app fixed clipped-left dense color="primary" dark)
-      v-toolbar-side-icon(@click.native="drawer = !drawer")
-      v-toolbar-title Todos
-      v-spacer
-      v-btn(icon)
-        v-icon search
-      v-btn(icon)
-        v-icon apps
-      v-btn(icon)
-        v-icon refresh
-      v-btn(icon)
-        v-icon more_vert
-    v-content
-      v-container(fluid fill-height)
-        v-layout(justify-center align-center)
-          v-flex(shrink)
-    v-btn(fab bottom right color="pink" dark fixed)
-      v-icon add
-    <!--button(@click="logout") 注销-->
+  v-app#inspire
+    v-container.app-wrapper(fluid fill-height align-center)
+      v-layout(align-center justify-start column)
+        toolbar(@sideIconClick = "fold = !fold")
+        v-flex.main-wrapper(fill-height)
+          sidebar(:fold="fold")
+          todos(:fold="fold")
+          v-speed-dial(v-model="fab" absolute right bottom direction="top" transition="scale-transition")
+            v-btn(slot="activator" v-model="fab" color="blue darken-2" dark fab)
+              v-icon account_circle
+              v-icon close
+            v-btn(fab small dark color="green")
+              v-icon edit
+            v-btn(fab small dark color="indigo")
+              v-icon add
+            v-btn(fab small dark color="red")
+              v-icon delete
 </template>
 
 <script>
 import { logout } from '@/leancloudAPI'
+import header from '../header/header'
+import sidebar from '../sidebar/sidebar'
+import Todos from '../todos/todos'
 export default {
   name: 'frame',
   data() {
     return {
-      drawer: null,
-      items: [
-        { icon: 'lightbulb_outline', text: 'Notes' },
-        { icon: 'touch_app', text: 'Reminders' },
-        { divider: true },
-        { heading: 'Labels' },
-        { icon: 'add', text: 'Create new label' },
-        { divider: true },
-        { icon: 'archive', text: 'Archive' },
-        { icon: 'delete', text: 'Trash' },
-        { divider: true },
-        { icon: 'settings', text: 'Settings' },
-        { icon: 'chat_bubble', text: 'Trash' },
-        { icon: 'help', text: 'Help' },
-        { icon: 'phonelink', text: 'App downloads' },
-        { icon: 'keyboard', text: 'Keyboard shortcuts' }
-      ]
+      fold: true,
+      fab: false
     }
   },
   methods: {
@@ -75,9 +36,27 @@ export default {
       logout()
       this.$router.push({ name: 'signin' })
     }
+  },
+  components: {
+    Todos,
+    toolbar: header,
+    sidebar
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+.app-wrapper
+  padding 0
+  .main-wrapper
+    position: relative
+    z-index: 10
+    display flex
+    flex-direction row
+    flex-wrap nowrap
+    justify-content flex-start
+    overflow hidden
+    padding-top: 60px
+    max-width 1000px
+    width 100%
 </style>

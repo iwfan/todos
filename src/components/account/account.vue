@@ -40,6 +40,7 @@ export default {
 <style lang="stylus" scoped>
 .account-box
   margin: 0 auto
+  overflow hidden
   .form-wrapper
     padding 0 10px 10px
 .slide-fade-enter-active,
