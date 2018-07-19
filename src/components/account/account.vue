@@ -6,7 +6,8 @@
           v-flex.account-wrapper
             v-card.account-box
               v-card-media(src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px")
-              router-view(@toast="showToast")
+              transition(name="slide-fade" mode="out-in")
+                router-view(@toast="showToast")
     v-snackbar(v-model="showSnackBar"
       v-bind:color="type"
       v-bind:timeout="4000"
@@ -36,14 +37,29 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .account-box
   margin: 0 auto
   .form-wrapper
     padding 0 10px 10px
+.slide-fade-enter-active,
+.slide-fade-leave-active
+  transition all .4s linear
+.slide-fade-enter
+  transform translateX(50px)
+  opacity 0
+.slide-fade-leave
+  transform translateX(0px)
+  opacity 1
+.slide-fade-leave-to
+  transform translateX(-50px)
+  opacity 0
+.slide-fade-enter-to
+  transform translateX(0px)
+  opacity 1
 </style>
 
-<style lang="stylus" data-role-type="normal">
+<style lang="stylus" data-role-type="normal" scoped>
 .normal
   .account-wrapper
     transform: translateY(-100px);
@@ -53,7 +69,7 @@ export default {
       // border-radius 10px
 </style>
 
-<style lang="stylus" data-role-type="mini">
+<style lang="stylus" data-role-type="mini" scoped>
 .mini
   .container
     padding 0 !important
