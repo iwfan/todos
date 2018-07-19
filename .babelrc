@@ -10,7 +10,6 @@
   ],
   "plugins": [
     "transform-vue-jsx",
-    "transform-runtime",
-    ["import", { "libraryName": "vue-antd-ui", "libraryDirectory": "es", "style": "css" }]
+    "transform-runtime"
   ]
 }

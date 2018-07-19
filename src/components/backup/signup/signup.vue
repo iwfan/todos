@@ -32,7 +32,7 @@
         router-link(to="/sign") 去登录
 </template>
 <script>
-import { singUp, hasUser } from '@/assets/js/leadCloudUtil'
+import { singUp, hasUser } from '@/leancloudAPI'
 import { ruleMixin } from '@/assets/js/mixin'
 export default {
   name: 'signup',
