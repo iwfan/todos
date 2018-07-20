@@ -1,7 +1,6 @@
 <template lang="pug">
   v-container.todos-wrapper(fluid fill-height align-center grid-list-md)
     v-layout(align-center justify-start column)
-
     v-btn.edit(absolute right bottom dark fab color="blue darken-2")
       v-icon edit
 </template>
