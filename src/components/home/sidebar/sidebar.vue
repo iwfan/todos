@@ -1,5 +1,6 @@
 <template lang="pug">
-  v-navigation-drawer(clipped absolute stateless floating v-model="fold"
+  v-navigation-drawer(clipped stateless floating
+    v-bind:value="true"
     width="250")
     v-list.pt-3(dense)
       template(v-for="(item, i) in items")
@@ -29,12 +30,6 @@
 <script>
 export default {
   name: 'sidebar',
-  props: {
-    fold: {
-      type: Boolean,
-      default: true
-    }
-  },
   data: () => ({
     items: [
       { icon: 'lightbulb_outline', text: 'Notes' },
@@ -52,14 +47,17 @@ export default {
       { icon: 'phonelink', text: 'App downloads' },
       { icon: 'keyboard', text: 'Keyboard shortcuts' }
     ]
-  })
+  }),
+  mounted() {
+    // this.$bus.on('foldSide')
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
 .application
   .v-navigation-drawer
-    background none
+    background #fafafa
     top: 60px
     z-index: 100
 </style>

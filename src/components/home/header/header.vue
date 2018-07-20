@@ -2,23 +2,19 @@
   v-flex.header-wrapper
     .header-container
       v-toolbar(dense flat clipped-left dark)
-        v-toolbar-side-icon(@click.native="$emit('sideIconClick')")
+        v-icon spa
         v-toolbar-title Todos
         v-spacer
         v-btn(icon)
+          v-icon add
+        v-btn(icon)
           v-icon search
         v-btn(icon)
-          v-icon apps
-        v-btn(icon)
-          v-icon refresh
-        v-btn(icon)
-          v-icon more_vert
+          v-icon account_circle
 </template>
 
 <script>
 export default {
-  props: {
-  },
   data: () => ({
 
   }),

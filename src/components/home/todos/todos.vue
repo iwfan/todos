@@ -1,7 +1,9 @@
 <template lang="pug">
-  v-container(fluid fill-height align-center grid-list-md
-    :style="{marginLeft: fold ? '250px': '0px' }")
+  v-container.todos-wrapper(fluid fill-height align-center grid-list-md)
     v-layout(align-center justify-start column)
+
+    v-btn.edit(absolute right bottom dark fab color="blue darken-2")
+      v-icon edit
 </template>
 
 <script>
@@ -18,6 +20,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.container
+.todos-wrapper
+  flex 1 1 auto
   padding 0 20px
+  .edit
+    bottom 50%
 </style>

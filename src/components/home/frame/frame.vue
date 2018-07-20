@@ -2,20 +2,10 @@
   v-app#inspire
     v-container.app-wrapper(fluid fill-height align-center)
       v-layout(align-center justify-start column)
-        toolbar(@sideIconClick = "fold = !fold")
+        toolbar
         v-flex.main-wrapper(fill-height)
-          sidebar(:fold="fold")
+          sidebar
           todos(:fold="fold")
-          v-speed-dial(v-model="fab" absolute right bottom direction="top" transition="scale-transition")
-            v-btn(slot="activator" v-model="fab" color="blue darken-2" dark fab)
-              v-icon account_circle
-              v-icon close
-            v-btn(fab small dark color="green")
-              v-icon edit
-            v-btn(fab small dark color="indigo")
-              v-icon add
-            v-btn(fab small dark color="red")
-              v-icon delete
 </template>
 
 <script>
@@ -38,6 +28,14 @@ export default {
       this.$router.push({ name: 'signin' })
     }
   },
+  mounted() {
+    this.$bus.$on('foldSideBar', type => {
+      // this.fold = type
+    })
+  },
+  beforeDestroy() {
+    this.$bus.$off('foldSideBar')
+  },
   components: {
     Todos,
     toolbar: header,
@@ -56,7 +54,7 @@ export default {
     flex-direction row
     flex-wrap nowrap
     justify-content flex-start
-    overflow hidden
+    /*overflow hidden*/
     padding-top: 60px
     max-width 1000px
     width 100%

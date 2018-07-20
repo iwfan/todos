@@ -33,6 +33,7 @@ export default {
         } else {
           classList.add('normal')
         }
+        this.$bus.$emit('foldSideBar', bp.width > 850)
       }, 300)
     }
   }
