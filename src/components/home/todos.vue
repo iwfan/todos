@@ -1,5 +1,14 @@
 <template lang="pug">
   .todos(v-cloak)
+    v-layout(
+          row
+          v-if="item.heading"
+          align-center
+          :key="i")
+          v-flex(xs6)
+            v-subheader(v-if="item.heading") {{ item.heading }}
+          v-flex(xs6 class="text-xs-right")
+            v-btn(small flat) edit
     header.header-wrapper
       .header-container
         .header-container__left

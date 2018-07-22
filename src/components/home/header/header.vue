@@ -9,16 +9,38 @@
           v-icon add
         v-btn(icon)
           v-icon search
-        v-btn(icon)
-          v-icon account_circle
+        v-speed-dial(v-model="fab" direction="bottom")
+          v-btn(slot="activator" v-model="fab" small icon fab)
+            v-icon(:style="{'fontSize': '24px'}") account_circle
+            v-icon(:style="{'fontSize': '24px'}") close
+          v-tooltip(left)
+            v-btn(fab dark small slot="activator" color="red" @click.native="dialog = true")
+              v-icon power_settings_new
+            span 注销
+      v-dialog(v-model="dialog" persistent max-width="290")
+        v-card
+          v-card-title 注销
+          v-card-text 您确定要退出吗？
+          v-card-actions
+            v-spacer
+            v-btn(flat color="green darken-1" @click.native="dialog = false") 取消
+            v-btn(flat color="red darken-1" @click.native="logout") 确定
 </template>
 
 <script>
+import { logout } from '@/leancloudAPI'
 export default {
   data: () => ({
-
+    fab: false,
+    dialog: false
   }),
-  mounted() {
+  methods: {
+    logout() {
+      this.dialog = false
+      logout().then(() => {
+        this.$router.push({ name: 'signin' })
+      })
+    }
   }
 }
 </script>

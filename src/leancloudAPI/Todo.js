@@ -97,16 +97,16 @@ export async function findTodo({
     query.limit(999)
     const todos = await query.find()
     return [].reduce.call(todos, (prev, curr, index, arr) => {
-      prev[curr.id] = {
+      prev.push({
         id: curr.id,
         title: curr.get('title'),
         content: curr.get('content'),
         status: curr.get('status'),
         priority: curr.get('priority'),
-        categories: curr.get('categories') ? curr.get('categories').id : undefined
-      }
+        categories: curr.get('categories') ? curr.get('categories').id : 'all_todos'
+      })
       return prev
-    }, {})
+    }, [])
   } catch (exception) {
     throw getErrorMessage(exception)
   }
