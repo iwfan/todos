@@ -6,7 +6,7 @@
       v-list.pt-3(dense)
         v-list-tile(
           ripple
-          @click="changeMenu('all', () => true)"
+          @click="changeMenu('all', '全部事项', () => true)"
           color="grey darken-1"
           :class="{'activeMenu': activeMenu === 'all'}")
           v-list-tile-action
@@ -16,7 +16,7 @@
         v-list-tile(
           color="grey darken-1"
           ripple
-          @click="changeMenu('done', (item) => item.status === '1')"
+          @click="changeMenu('done', '已完成', (item) => item.status === '1')"
           :class="{'activeMenu': activeMenu === 'done'}")
           v-list-tile-action
             v-icon(color="green") check
@@ -25,7 +25,7 @@
         v-list-tile(
           ripple
           color="grey darken-1"
-          @click="changeMenu('trash', (item) => item.status === '2')"
+          @click="changeMenu('trash', '已删除', (item) => item.status === '2')"
           :class="{'activeMenu': activeMenu === 'trash'}")
           v-list-tile-action
             v-icon(color="red") delete
@@ -41,7 +41,7 @@
                   v-icon(:style="{'fontSize': '22px', 'color': 'rgba(0, 0, 0, .54)'}") playlist_add
           v-list-tile(ripple v-for="(cate, index) in categories" :key="cate.id"
             color="grey darken-1"
-            @click="changeMenu(cate.id, cate.id)"
+            @click="changeMenu(cate.id, cate.name, cate.id)"
             :class="{'activeMenu': activeMenu === cate.id}"
             @mouseenter.native="cate.active = true"
             @mouseleave.native="cate.active = false")
@@ -122,9 +122,9 @@ export default {
     }
   },
   methods: {
-    changeMenu(menu, arg) {
+    changeMenu(menu, name, arg) {
       this.activeMenu = menu
-      this.$emit('changeFilter', arg)
+      this.$emit('changeFilter', name, arg)
     },
     addCate() {
       if (this.$refs.newCateName.validate()) {

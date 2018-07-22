@@ -56,8 +56,8 @@ export default {
       this.type = type
       this.msg = msg
     },
-    changeFilter(fn) {
-      console.log(fn)
+    changeFilter(name, fn) {
+      console.log(name, fn)
     }
   },
   components: {
