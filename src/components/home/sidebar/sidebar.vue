@@ -1,28 +1,34 @@
 <template lang="pug">
   .wrapper
     v-navigation-drawer(stateless floating
+      width="250"
       v-bind:value="true")
       v-list.pt-3(dense)
         v-list-tile(
           ripple
-          @click="$emit('changeFilter', () => true)")
+          @click="changeMenu('all', () => true)"
+          color="grey darken-1"
+          :class="{'activeMenu': activeMenu === 'all'}")
           v-list-tile-action
-            v-icon lightbulb_outline
+            v-icon(color="primary") archive
           v-list-tile-content
             v-list-tile-title 全部事项
-        v-divider.my-3
         v-list-tile(
+          color="grey darken-1"
           ripple
-          @click="$emit('changeFilter', (item) => item.status === '1')")
+          @click="changeMenu('done', (item) => item.status === '1')"
+          :class="{'activeMenu': activeMenu === 'done'}")
           v-list-tile-action
-            v-icon archive
+            v-icon(color="green") check
           v-list-tile-content
             v-list-tile-title 已完成
         v-list-tile(
           ripple
-          @click="$emit('changeFilter', (item) => item.status === '2')")
+          color="grey darken-1"
+          @click="changeMenu('trash', (item) => item.status === '2')"
+          :class="{'activeMenu': activeMenu === 'trash'}")
           v-list-tile-action
-            v-icon delete
+            v-icon(color="red") delete
           v-list-tile-content
             v-list-tile-title 已删除
         template(v-if="categories")
@@ -31,10 +37,12 @@
               v-flex
                 v-subheader 分类
               v-flex(class="text-xs-right")
-                v-btn(small flat icon @click="addCate")
+                v-btn(small flat icon @click="showAddCateDialog = true")
                   v-icon(:style="{'fontSize': '22px', 'color': 'rgba(0, 0, 0, .54)'}") playlist_add
-          v-list-tile(v-for="(cate, index) in categories" :key="cate.id"
-            @click="$emit('changeFilter', cate.id)"
+          v-list-tile(ripple v-for="(cate, index) in categories" :key="cate.id"
+            color="grey darken-1"
+            @click="changeMenu(cate.id, cate.id)"
+            :class="{'activeMenu': activeMenu === cate.id}"
             @mouseenter.native="cate.active = true"
             @mouseleave.native="cate.active = false")
             v-list-tile-content
@@ -44,24 +52,44 @@
                 :loading="cate.removeLoading"
                 @click.native.stop="removeCate(cate.id, index)")
                 v-icon delete_sweep
-    v-dialog(v-model="showAddCateDialog" persistent max-width="400")
+    v-dialog(v-model="showAddCateDialog" persistent max-width="400"
+      @keyup.native.enter.prevent="addCate")
       v-card
         v-card-title 添加新分类
         v-card-text
-          v-text-field(label="分类名称"
-          browser-autocomplete="false"
-          autofocus
-          :rules = "[f => !!f || '不能为空', f => true]"
-          prepend-icon="place"
-          validate-on-blur)
+          v-text-field(ref="newCateName" label="分类名称"
+            v-model="newCateDataForm.name"
+            browser-autocomplete="false"
+            name="name"
+            autofocus
+            required
+            counter="15"
+            :rules = "[\
+              f => !!f || '不能为空',\
+              f => !!f && f.length < 15 || '超出长度了呦'\
+            ]"
+            prepend-icon="widgets"
+            validate-on-blur
+            type="text"
+            @keyup.native.enter.prevent="addCate")
         v-card-actions
           v-spacer
           v-btn(color="grey darken-1" flat @click.native="showAddCateDialog = false") 取消
-          v-btn(color="blue darken-1" flat @click.native="showAddCateDialog = false") 添加
+          v-btn(color="blue darken-1" flat :loading="addCateLoading" @click.native="addCate") 添加
+    v-dialog(v-model="deleteCateDialog" persistent max-width="400")
+      v-card
+        v-card-title 删除
+        v-card-text 确定删除该分类吗？(该分类下的数据都将移入全部事项中)
+        v-card-actions
+          v-spacer
+          v-btn(flat color="green darken-1" @click.native="deleteCateDialog = false") 取消
+          v-btn(flat color="red darken-1"
+            @keyup.native.enter="deleteCate"
+            @click.native="deleteCate" :loading="deleteLoading") 删除
 </template>
 
 <script>
-import { addCategories, updateCategories, deleteCategories } from '@/leancloudAPI'
+import { addTodo, addCategories, updateCategories, deleteCategories } from '@/leancloudAPI'
 export default {
   name: 'sidebar',
   props: {
@@ -73,8 +101,15 @@ export default {
   },
   data() {
     return {
-      showAddCateDialog: false
-      // categories: this.appData.categories
+      activeMenu: 'all',
+      showAddCateDialog: false,
+      addCateLoading: false,
+      newCateDataForm: {
+        name: ''
+      },
+      deleteCateDialog: false,
+      deleteLoading: false,
+      willDeleteCateData: { id: null, index: null }
     }
   },
   computed: {
@@ -87,26 +122,63 @@ export default {
     }
   },
   methods: {
-    addCate() {
-      console.log('addCate')
-      this.showAddCateDialog = true
+    changeMenu(menu, arg) {
+      this.activeMenu = menu
+      this.$emit('changeFilter', arg)
     },
-    removeCate(id, index) {
-      console.log(id, index)
-      this.categories[index].removeLoading = true
+    addCate() {
+      if (this.$refs.newCateName.validate()) {
+        this.addCateLoading = true
+        const { name } = this.newCateDataForm
+        addCategories(name).then(cate => {
+          this.$set(this.appData.categories, cate.id, cate)
+          this.showAddCateDialog = false
+          this.$emit('showToast', 'success', '添加成功')
+        }).catch(e => {
+          this.$emit('showToast', 'error', e)
+        }).finally(() => {
+          this.addCateLoading = false
+          this.newCateDataForm.name = ''
+        })
+      }
+    },
+    deleteCate() {
+      const { id } = this.willDeleteCateData
+      this.deleteLoading = true
       deleteCategories(id).then(() => {
-        this.categories[index].removeLoading = false
         this.$delete(this.appData.categories, id)
         this.$emit('showToast', 'success', '删除成功')
       }).catch(e => {
         this.$emit('showToast', 'error', e)
-        this.categories[index].removeLoading = false
+      }).finally(() => {
+        this.deleteLoading = false
+        this.deleteCateDialog = false
       })
     },
+    removeCate(id, index) {
+      this.willDeleteCateData.id = id
+      this.willDeleteCateData.index = index
+      this.deleteCateDialog = true
+    },
     test() {
-      console.log(addCategories)
       console.log(updateCategories)
+      console.log(addTodo)
     }
+  },
+  mounted() {
+    // debugger
+    // addTodo({title: '取消设备tooltip上的链路算法显示', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '机柜视图左侧树， 使用<设备所属子网>-<设备IP>格式展示', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '过滤功能仅作用于全网视图', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '全网与子网的中心点与缩放存数据库', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '全网上 展开收起设备的BUG， 过滤后， 展开会将过滤掉的设备展示出来', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '每个子网存储单独的中心点与缩放比例', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '设备发现后， 设备位置错乱', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '移动设备发现菜单的位置， 移至工具栏', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '取消中心点', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: 'underscore源码学习', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: 'hyperapp学习', categories: '5b54a29a9f5454003cf09f59'})
+    // addTodo({title: '这是一个其他任务'})
   }
 }
 </script>
@@ -117,6 +189,10 @@ export default {
     background #fafafa
     top: 60px
     z-index: 100
-    padding 0 10px
+    padding 0 8px
     overflow-x hidden
+    .v-list .activeMenu
+      background-color #e6e6e6
+      color: rgb(33, 33, 33) !important
+      font-weight: 700
 </style>

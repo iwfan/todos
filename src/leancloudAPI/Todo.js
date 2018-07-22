@@ -37,6 +37,8 @@ export async function addTodo({
     if (categories) {
       const cate = AV.Object.createWithoutData(CATEGORIES, categories)
       todo.set('categories', cate)
+    } else {
+      todo.set('categories', AV.Object.createWithoutData(CATEGORIES, 'all'))
     }
     const t = await todo.save()
     return {
@@ -87,10 +89,8 @@ export async function findTodo({
       query.contains('title', keyword)
       query.contains('content', keyword)
     }
-    if (categories) {
-      const cate = AV.Object.createWithoutData(CATEGORIES, categories)
-      query.equalTo('categories', cate)
-    }
+    const cate = AV.Object.createWithoutData(CATEGORIES, categories || 'all')
+    query.equalTo('categories', cate)
     query.equalTo('owner', getCurrentUser())
     query.select(['title', 'content', 'status', 'priority', 'categories'])
     query.descending('createdAt')

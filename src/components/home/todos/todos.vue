@@ -40,6 +40,11 @@ export default {
       return this.categories[cateId].name
     }
   },
+  created() {
+    this.$parent.$on('addTodo', () => {
+      console.log('addTodo')
+    })
+  },
   components: {
     TodoGroup,
     TodoItem

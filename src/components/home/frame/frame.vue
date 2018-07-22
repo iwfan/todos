@@ -3,7 +3,7 @@
     template(v-if="!loading")
       v-container.app-wrapper(fluid fill-height align-center)
         v-layout(align-center justify-start column)
-          toolbar
+          toolbar(@addTodo="$emit('addTodo')")
           v-flex.main-wrapper(fill-height)
             sidebar(:appData.sync="appData"
               @changeFilter="changeFilter"
@@ -80,6 +80,6 @@ export default {
     justify-content flex-start
     /*overflow hidden*/
     padding-top: 60px
-    max-width 1000px
+    max-width 960px
     width 100%
 </style>

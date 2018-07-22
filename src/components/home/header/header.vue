@@ -3,9 +3,9 @@
     .header-container
       v-toolbar(dense flat clipped-left dark)
         v-icon spa
-        v-toolbar-title Todos
+        v-toolbar-title.white--text Todos
         v-spacer
-        v-btn(icon)
+        v-btn(icon @click="$emit('addTodo')")
           v-icon add
         v-btn(icon)
           v-icon search
@@ -59,6 +59,6 @@ export default {
   background #4285f4
   box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)
   .header-container
-    max-width 1000px
+    max-width 960px
     margin: 0 auto
 </style>

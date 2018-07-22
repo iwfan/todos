@@ -1,4 +1,4 @@
-import { AV, getErrorMessage, CATEGORIES, Categories } from './base'
+import { AV, getErrorMessage, TODO, CATEGORIES, Categories } from './base'
 import { getCurrentUser } from './User'
 
 // 此处需要注意leancloud每次只能查询100条数据
@@ -38,8 +38,27 @@ export async function updateCategories(id, name, order) {
 
 export async function deleteCategories(id) {
   const categories = AV.Object.createWithoutData(CATEGORIES, id)
+  await resetTodoFolder(categories)
   try {
     await categories.destroy()
+  } catch (exception) {
+    throw getErrorMessage(exception)
+  }
+}
+
+async function resetTodoFolder(categories) {
+  try {
+    const query = new AV.Query(TODO)
+    query.equalTo('owner', getCurrentUser())
+    query.equalTo('categories', categories)
+    query.select(['categories'])
+    const todos = await query.find()
+    if (todos && todos.length) {
+      todos.forEach(todo => {
+        todo.set('categories', AV.Object.createWithoutData(CATEGORIES, 'all'))
+      })
+      await AV.Object.saveAll(todos)
+    }
   } catch (exception) {
     throw getErrorMessage(exception)
   }
