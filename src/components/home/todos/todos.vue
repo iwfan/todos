@@ -2,13 +2,20 @@
   v-container.todos-wrapper(fluid fill-height align-center grid-list-md)
     v-layout(column wrap)
       v-flex
-        todo-group(v-for="(item, key, index) in todosData" :key="key" :groupName="getCateName(key)" :todos="item")
-    <!--v-btn.edit(absolute right bottom dark fab color="blue darken-2")-->
-      <!--v-icon edit-->
+        v-list(subheader)
+        v-subheader {{ dpName }}
+        template(v-if="todosData && todosData.length")
+          v-expansion-panel()
+              v-expansion-panel-content(v-for="(item, index) in todosData" :key="item.id")
+                div(slot="header")
+                  v-checkbox(:label="item.title")
+                v-card
+                  v-card-text(class="grey lighten-3") Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ali
+        template(v-else)
+          v-alert(:value="true" type="info" outline) 干净的像你的脑子一样
 </template>
 
 <script>
-import TodoGroup from './todoGroup'
 import TodoItem from './todoItem'
 export default {
   name: 'todos',
@@ -17,6 +24,20 @@ export default {
       type: Object,
       required: true,
       default: () => ({})
+    },
+    dpName: {
+      type: String,
+      required: true
+    },
+    filterKey: {
+      type: String,
+      required: true,
+      default: ''
+    },
+    filterValue: {
+      type: String,
+      required: true,
+      default: ''
     }
   },
   data() {
@@ -26,27 +47,20 @@ export default {
   },
   computed: {
     todosData () {
-      return Object.keys(this.appData.categories).reduce((p, c, i, a) => {
-        const todos = [].filter.call(this.appData.todos, item => item.categories === c)
-        if (todos && todos.length) {
-          p[c] = todos
+      // debugger
+      return [].filter.call(this.appData.todos, item => {
+        if (this.filterKey) {
+          return item[this.filterKey] === this.filterValue
         }
-        return p
-      }, {})
+        return true
+      })
     }
   },
   methods: {
-    getCateName(cateId) {
-      return this.categories[cateId].name
-    }
   },
   created() {
-    this.$parent.$on('addTodo', () => {
-      console.log('addTodo')
-    })
   },
   components: {
-    TodoGroup,
     TodoItem
   }
 }

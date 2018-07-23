@@ -89,8 +89,10 @@ export async function findTodo({
       query.contains('title', keyword)
       query.contains('content', keyword)
     }
-    const cate = AV.Object.createWithoutData(CATEGORIES, categories || 'all')
-    query.equalTo('categories', cate)
+    if (categories) {
+      const cate = AV.Object.createWithoutData(CATEGORIES, categories)
+      query.equalTo('categories', cate)
+    }
     query.equalTo('owner', getCurrentUser())
     query.select(['title', 'content', 'status', 'priority', 'categories'])
     query.descending('createdAt')
@@ -103,7 +105,7 @@ export async function findTodo({
         content: curr.get('content'),
         status: curr.get('status'),
         priority: curr.get('priority'),
-        categories: curr.get('categories') ? curr.get('categories').id : 'all_todos'
+        categories: curr.get('categories') ? curr.get('categories').id : 'all'
       })
       return prev
     }, [])

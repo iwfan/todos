@@ -5,10 +5,14 @@
         v-layout(align-center justify-start column)
           toolbar(@addTodo="$emit('addTodo')")
           v-flex.main-wrapper(fill-height)
-            sidebar(:appData.sync="appData"
+            sidebar(:app-data.sync="appData"
               @changeFilter="changeFilter"
               @showToast="showToast")
-            todos(:appData="appData")
+            todos(:app-data="appData"
+              :dp-name="dpName"
+              :filter-key="filterKey"
+              :filter-value="filterValue"
+              @showToast="showToast")
     v-dialog(v-model="loading" persistent width="300")
       v-card(color="primary" dark)
         v-card-text 加载中，请稍候...
@@ -35,7 +39,10 @@ export default {
       appData: {
         categories: null,
         todos: null
-      }
+      },
+      filterKey: '',
+      filterValue: '',
+      dpName: '全部事项'
     }
   },
   created() {
@@ -56,8 +63,10 @@ export default {
       this.type = type
       this.msg = msg
     },
-    changeFilter(name, fn) {
-      console.log(name, fn)
+    changeFilter(name, key, value) {
+      this.dpName = name
+      this.filterKey = key
+      this.filterValue = value
     }
   },
   components: {
@@ -79,7 +88,7 @@ export default {
     flex-wrap nowrap
     justify-content flex-start
     /*overflow hidden*/
-    padding-top: 60px
+    padding-top: 50px
     max-width 960px
     width 100%
 </style>

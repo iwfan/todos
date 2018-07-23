@@ -5,10 +5,14 @@
         v-icon spa
         v-toolbar-title.white--text Todos
         v-spacer
-        v-btn(icon @click="$emit('addTodo')")
-          v-icon add
-        v-btn(icon)
-          v-icon search
+        v-tooltip(bottom)
+          v-btn(icon slot="activator" @click="$emit('addTodo')")
+            v-icon add
+          span 添加事项
+        v-tooltip(bottom)
+          v-btn(icon slot="activator")
+            v-icon search
+          span 搜索
         v-speed-dial(v-model="fab" direction="bottom")
           v-btn(slot="activator" v-model="fab" small icon fab)
             v-icon(:style="{'fontSize': '24px'}") account_circle

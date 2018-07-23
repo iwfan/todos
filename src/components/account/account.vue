@@ -7,7 +7,8 @@
             v-card.account-box
               v-card-media(src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px")
               transition(name="slide-fade" mode="out-in")
-                router-view(@toast="showToast")
+                keep-alive
+                  router-view(@toast="showToast")
     v-snackbar(v-model="showSnackBar"
       v-bind:color="type"
       v-bind:timeout="4000"
@@ -40,6 +41,7 @@ export default {
 <style lang="stylus" scoped>
 .account-box
   margin: 0 auto
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, .1)
   overflow hidden
   .form-wrapper
     padding 0 10px 10px
@@ -67,7 +69,6 @@ export default {
     .account-box
       max-width 450px
       padding 0 0 10px
-      // border-radius 10px
 </style>
 
 <style lang="stylus" data-role-type="mini" scoped>
