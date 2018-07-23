@@ -3,7 +3,7 @@
     template(v-if="!loading")
       v-container.app-wrapper(fluid fill-height align-center)
         v-layout(align-center justify-start column)
-          toolbar(@addTodo="$emit('addTodo')")
+          toolbar(@addTodo="addTodoDialog = true")
           v-flex.main-wrapper(fill-height)
             sidebar(:app-data.sync="appData"
               @changeFilter="changeFilter"
@@ -13,14 +13,41 @@
               :filter-key="filterKey"
               :filter-value="filterValue"
               @showToast="showToast")
+      v-btn(fixed dark fab right bottom color="primary" @click="addTodoDialog = true")
+        v-icon add
     v-dialog(v-model="loading" persistent width="300")
       v-card(color="primary" dark)
         v-card-text 加载中，请稍候...
           v-progress-linear(indeterminate color="white" class="mb-0")
     v-snackbar(v-model="showSnackBar"
       v-bind:color="type"
-      v-bind:timeout="4000"
+      v-bind:timeout="6000"
       left bottom v-bind:text="msg") {{ msg }}
+      // hide-overlay
+    v-dialog(content-class="addTodoDialog" v-model="addTodoDialog" scrollable persistent width="700px")
+      v-container.elevation-1
+        v-layout
+          v-flex
+            v-toolbar(dense flat height="40" dark color="grey darken-3")
+              v-toolbar-title(:style="{'color': '#e3e3e3'}") 添加事项
+              v-spacer
+              v-btn(icon small depressed flat @click="addTodoDialog = false")
+                v-icon(:style="{'color': '#b3b3b3'}") close
+            v-card
+              v-card-title
+                input(type=text ref="newTodoTitle" placeholder="标题")
+              v-divider.mb-2
+              v-card-text
+                textarea(placeholder="备注" ref="newTodoContent")
+              v-card-actions
+                v-btn(icon)
+                  v-icon(:style="{'color': '#666666'}") flag
+                v-btn(icon)
+                  v-icon(:style="{'color': '#666666'}") priority_high
+                v-btn(icon)
+                  v-icon(:style="{'color': '#666666'}") event_note
+                v-spacer
+                v-btn(color="primary") 添加
 </template>
 
 <script>
@@ -42,7 +69,8 @@ export default {
       },
       filterKey: '',
       filterValue: '',
-      dpName: '全部事项'
+      dpName: '全部事项',
+      addTodoDialog: false
     }
   },
   created() {
@@ -91,4 +119,26 @@ export default {
     padding-top: 50px
     max-width 960px
     width 100%
+.addTodoDialog
+  .container
+    padding 0
+    .v-toolbar i
+      font-size 20px
+    .v-toolbar .v-toolbar__title
+      font-size 14px
+    .v-card
+      .v-card__title
+        padding 0 20px
+        input
+          width 100%
+          height: 40px
+      .v-card__text
+        padding 0 20px
+        height: 400px
+        textarea
+          width 100%
+          height 100%
+          resize: none
+      .v-card__actions
+        padding 10px 20px
 </style>
