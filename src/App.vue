@@ -1,11 +1,42 @@
 <template lang="pug">
-  #todos
+  div(ref="router-wrapper")
     router-view
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
 export default {
-  name: 'App'
+  name: 'App',
+  data() {
+    return {
+      wrapEL: null
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.wrapEL = this.$refs['router-wrapper']
+      window.addEventListener('resize', this.onResize, { passive: true })
+      window.dispatchEvent(new Event('resize'))
+    })
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', this.onResize, { passive: true })
+  },
+  computed: {
+    onResize() {
+      return debounce(() => {
+        const classList = this.wrapEL.classList
+        classList.value = ''
+        const bp = this.$vuetify.breakpoint
+        if (bp.xs) {
+          classList.add('mini')
+        } else {
+          classList.add('normal')
+        }
+        this.$bus.$emit('foldSideBar', bp.width > 850)
+      }, 300)
+    }
+  }
 }
 </script>
 
@@ -14,14 +45,6 @@ export default {
   box-sizing border-box
 *:focus
   outline none
-html, body, #todos
-  height 100%
-body
-  font-family Monospaced Number,Chinese Quote,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  color: #555
-  background-color: #f1f1f1
 /*::-webkit-scrollbar-track
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
   border-radius: 10px
