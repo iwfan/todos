@@ -5,13 +5,13 @@
         v-layout(align-center justify-center)
           v-flex.account-wrapper
             v-card.account-box
-              v-card-media(src="https://cdn.vuetifyjs.com/images/cards/desert.jpg" height="200px")
+              v-card-media(:src="mediaImg" height="200px")
               transition(name="slide-fade" mode="out-in")
                 keep-alive
                   router-view(@toast="showToast")
     v-snackbar(v-model="showSnackBar"
       v-bind:color="type"
-      v-bind:timeout="4000"
+      v-bind:timeout="6000"
       left
       bottom
       v-bind:text="msg"
@@ -25,7 +25,8 @@ export default {
     return {
       showSnackBar: false,
       msg: '',
-      type: ''
+      type: '',
+      mediaImg: this.getRandomImg()
     }
   },
   methods: {
@@ -33,7 +34,16 @@ export default {
       this.showSnackBar = true
       this.type = type
       this.msg = msg
+    },
+    getRandomImg() {
+      const imgArray = ['/static/img1.jpg', '/static/img2.jpg', '/static/img3.jpg']
+      const index = ~~(Math.random() * 3)
+      return imgArray[index]
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.mediaImg = this.getRandomImg()
+    next()
   }
 }
 </script>

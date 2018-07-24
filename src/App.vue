@@ -45,6 +45,15 @@ export default {
   box-sizing border-box
 *:focus
   outline none
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill
+  box-shadow: 0 0 0 1000px #fff inset
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus
+  box-shadow: 0 0 0 1000px #fff inset
 /*::-webkit-scrollbar-track
   box-shadow: inset 0 0 6px rgba(0,0,0,0.3)
   border-radius: 10px
