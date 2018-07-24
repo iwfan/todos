@@ -3,14 +3,14 @@
     v-layout(column wrap)
       v-flex
         v-list(subheader)
-        v-subheader {{ dpName }}
+        v-subheader {{ dpName }} {{ todosData.length }}
         template(v-if="todosData && todosData.length")
           v-expansion-panel()
-              v-expansion-panel-content(v-for="(item, index) in todosData" :key="item.id")
+              v-expansion-panel-content(v-for="(item, index) in todosData" :key="item.id" expand-icon="menu-down")
                 div(slot="header")
                   v-checkbox(:label="item.title")
                 v-card
-                  v-card-text(class="grey lighten-3") Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ali
+                  v-card-text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ali
         template(v-else)
           v-alert(:value="true" type="info" outline) 干净的像你的脑子一样
 </template>

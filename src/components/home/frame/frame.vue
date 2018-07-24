@@ -23,31 +23,7 @@
       v-bind:color="type"
       v-bind:timeout="6000"
       left bottom v-bind:text="msg") {{ msg }}
-      // hide-overlay
-    v-dialog(content-class="addTodoDialog" v-model="addTodoDialog" scrollable persistent width="700px")
-      v-container.elevation-1
-        v-layout
-          v-flex
-            v-toolbar(dense flat height="40" dark color="grey darken-3")
-              v-toolbar-title(:style="{'color': '#e3e3e3'}") 添加事项
-              v-spacer
-              v-btn(icon small depressed flat @click="addTodoDialog = false")
-                v-icon(:style="{'color': '#b3b3b3'}") close
-            v-card
-              v-card-title
-                input(type=text ref="newTodoTitle" placeholder="标题")
-              v-divider.mb-2
-              v-card-text
-                textarea(placeholder="备注" ref="newTodoContent")
-              v-card-actions
-                v-btn(icon)
-                  v-icon(:style="{'color': '#666666'}") flag
-                v-btn(icon)
-                  v-icon(:style="{'color': '#666666'}") priority_high
-                v-btn(icon)
-                  v-icon(:style="{'color': '#666666'}") event_note
-                v-spacer
-                v-btn(color="primary") 添加
+    todo-editor(:visible="addTodoDialog" :on-save="addNewTodo" v-on:close="addTodoDialog = false" )
 </template>
 
 <script>
@@ -55,6 +31,7 @@ import { findCategories, findTodo } from '@/leancloudAPI'
 import header from '../header/header'
 import sidebar from '../sidebar/sidebar'
 import Todos from '../todos/todos'
+import TodoEditor from '../todos/todoEditor'
 export default {
   name: 'frame',
   data() {
@@ -95,9 +72,13 @@ export default {
       this.dpName = name
       this.filterKey = key
       this.filterValue = value
+    },
+    addNewTodo(data) {
+      console.log(data)
     }
   },
   components: {
+    TodoEditor,
     Todos,
     toolbar: header,
     sidebar
@@ -119,26 +100,4 @@ export default {
     padding-top: 50px
     max-width 960px
     width 100%
-.addTodoDialog
-  .container
-    padding 0
-    .v-toolbar i
-      font-size 20px
-    .v-toolbar .v-toolbar__title
-      font-size 14px
-    .v-card
-      .v-card__title
-        padding 0 20px
-        input
-          width 100%
-          height: 40px
-      .v-card__text
-        padding 0 20px
-        height: 400px
-        textarea
-          width 100%
-          height 100%
-          resize: none
-      .v-card__actions
-        padding 10px 20px
 </style>

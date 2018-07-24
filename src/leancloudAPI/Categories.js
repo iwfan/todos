@@ -3,6 +3,16 @@ import { getCurrentUser } from './User'
 
 // 此处需要注意leancloud每次只能查询100条数据
 export async function addCategories(name, order) {
+  const cate = await findCategories()
+  if (cate && Object.keys(cate).length >= 10) {
+    throw getErrorMessage('超出上限， 最多只能创建10个分类')
+  } else {
+    for (let id in cate) {
+      if (cate[id].name === name) {
+        throw getErrorMessage('已经存在同名的分类')
+      }
+    }
+  }
   const categories = new Categories()
   categories.set('name', name)
   categories.set('order', order || 0)
@@ -64,7 +74,7 @@ async function resetTodoFolder(categories) {
   }
 }
 
-export async function findCategories({ id, name } = { id: '', name: '' }) {
+export async function findCategories({ id, name, strictName } = { id: '', name: '', strictName: '' }) {
   try {
     const query = new AV.Query(CATEGORIES)
     query.exists('owner')
@@ -73,6 +83,9 @@ export async function findCategories({ id, name } = { id: '', name: '' }) {
     }
     if (name) {
       query.contains('name', name)
+    }
+    if (strictName) {
+      query.equalTo('name', strictName)
     }
     query.equalTo('owner', getCurrentUser())
     query.select(['name', 'order'])

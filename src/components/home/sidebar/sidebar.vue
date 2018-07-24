@@ -38,7 +38,7 @@
                 v-flex
                   v-subheader 分类
                 v-flex(class="text-xs-right")
-                  v-btn(small flat icon @click="showAddCateDialog = true")
+                  v-btn(small flat icon @click.stop="showAddCateDialog = true")
                     v-icon(:style="{'fontSize': '22px', 'color': 'rgba(0, 0, 0, .54)'}") playlist_add
             v-list-tile(ripple v-for="(cate, index) in categories" :key="cate.id"
               color="grey darken-1"
@@ -59,8 +59,8 @@
         v-card-title 添加新分类
         v-card-text
           v-text-field(ref="newCateName" label="分类名称"
-            v-model="newCateDataForm.name"
-            browser-autocomplete="false"
+            v-model.lazy.trim="newCateDataForm.name"
+            browser-autocomplete="off"
             name="name"
             autofocus
             required
@@ -75,8 +75,8 @@
             @keyup.native.enter.prevent="addCate")
         v-card-actions
           v-spacer
-          v-btn(color="grey darken-1" flat @click.native="showAddCateDialog = false") 取消
-          v-btn(color="blue darken-1" flat :loading="addCateLoading" @click.native="addCate") 添加
+          v-btn(color="grey darken-1" flat @click="cancaleAddCate") 取消
+          v-btn(color="blue darken-1" flat :loading="addCateLoading" @click="addCate") 添加
     v-dialog(v-model="deleteCateDialog" persistent max-width="400")
       v-card
         v-card-title 删除
@@ -135,14 +135,18 @@ export default {
         addCategories(name).then(cate => {
           this.$set(this.appData.categories, cate.id, cate)
           this.showAddCateDialog = false
+          this.newCateDataForm.name = ''
           this.$emit('showToast', 'success', '添加成功')
         }).catch(e => {
           this.$emit('showToast', 'error', e)
         }).finally(() => {
           this.addCateLoading = false
-          this.newCateDataForm.name = ''
         })
       }
+    },
+    cancaleAddCate() {
+      this.newCateDataForm.name = ''
+      this.showAddCateDialog = false
     },
     deleteCate() {
       const { id } = this.willDeleteCateData
