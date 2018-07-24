@@ -10,7 +10,7 @@
                 div(slot="header")
                   v-checkbox(:label="item.title")
                 v-card
-                  v-card-text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ali
+                  v-card-text.markdown-body(v-html="mark(item.content)")
         template(v-else)
           v-alert(:value="true" type="info" outline) 干净的像你的脑子一样
 </template>
@@ -47,7 +47,6 @@ export default {
   },
   computed: {
     todosData () {
-      // debugger
       return [].filter.call(this.appData.todos, item => {
         if (this.filterKey) {
           return item[this.filterKey] === this.filterValue
@@ -57,6 +56,17 @@ export default {
     }
   },
   methods: {
+    mark(input) {
+      return window.markdownit({highlight: function (str, lang) {
+        if (lang && window.hljs.getLanguage(lang)) {
+          try {
+            return window.hljs.highlight(lang, str).value
+          } catch (__) {}
+        }
+
+        return '' // use external default escaping
+      }}).render(input)
+    }
   },
   created() {
   },
@@ -65,6 +75,17 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+  .v-card__text code
+    display: inline
+    color #24292e
+    box-shadow none
+    font-weight: normal
+    background-color rgba(27,31,35,.05)
+  .v-card__text p
+    margin 0
+</style>
 
 <style lang="stylus" scoped>
 .todos-wrapper

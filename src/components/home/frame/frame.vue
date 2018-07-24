@@ -23,11 +23,11 @@
       v-bind:color="type"
       v-bind:timeout="6000"
       left bottom v-bind:text="msg") {{ msg }}
-    todo-editor(:visible="addTodoDialog" :on-save="addNewTodo" v-on:close="addTodoDialog = false" )
+    todo-editor(:visible="addTodoDialog" :on-save="addNewTodo" @close="addTodoDialog = false" @showToast="showToast")
 </template>
 
 <script>
-import { findCategories, findTodo } from '@/leancloudAPI'
+import { findCategories, findTodo, addTodo } from '@/leancloudAPI'
 import header from '../header/header'
 import sidebar from '../sidebar/sidebar'
 import Todos from '../todos/todos'
@@ -73,8 +73,18 @@ export default {
       this.filterKey = key
       this.filterValue = value
     },
-    addNewTodo(data) {
-      console.log(data)
+    async addNewTodo(data) {
+      addTodo({
+        title: data.title,
+        content: data.content,
+        priority: data.priority,
+        categories: data.categories,
+        status: 0
+      }).then(data => {
+        this.appData.todos.splice(0, 0, data)
+      }).catch(e => {
+        this.showToast('error', e)
+      })
     }
   },
   components: {
