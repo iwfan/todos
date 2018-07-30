@@ -28,7 +28,7 @@
               v-btn(icon)
                 v-icon(:style="{'color': '#666666'}") event_note
               v-spacer
-              v-btn(color="primary" @click="onSave({ title, content })") 添加
+              v-btn(color="primary" @click="beforeSave" :loading="saveLoading") 添加
 </template>
 
 <script>
@@ -54,15 +54,15 @@ export default {
   },
   data() {
     return {
+      saveLoading: false,
       title: this.todoData.title || '',
-      content: this.todoData.content || '',
-      priority: this.todoData.priority || '',
-      categories: this.todoData.categories || '',
-      value: `\`code\`
+      content: this.todoData.content || `\`code\`
 \`\`\`javascript
 var a = 'hello world'
 \`\`\`
       `,
+      priority: this.todoData.priority || '',
+      categories: this.todoData.categories || '',
       toolbar: {
         bold: true, // 粗体
         italic: true, // 斜体
@@ -101,6 +101,25 @@ var a = 'hello world'
     }
   },
   methods: {
+    getRealLen(str) {
+      // eslint-disable-next-line
+      return str.replace(/[^\x00-\xff]/g, '__').length
+    },
+    validate() {
+      const lt = this.getRealLen(this.title)
+      if (lt > 50) {
+        this.$emit('showToast', 'error', '标题太长了呦， 不要超过50个字符。')
+        return false
+      }
+
+      const lc = this.getRealLen(this.content)
+      if (lc > 500) {
+        this.$emit('showToast', 'error', '内容太长了呦， 不要超过500个字符。')
+        return false
+      }
+
+      return true
+    },
     reset() {
       this.title = ''
       this.content = ''
@@ -108,6 +127,19 @@ var a = 'hello world'
     beforeClose() {
       this.reset()
       this.$emit('close')
+    },
+    beforeSave() {
+      if (this.validate()) {
+        this.saveLoading = true
+        this.onSave({
+          title: this.title,
+          content: this.content,
+          priority: 0
+        }).then(() => {
+          this.saveLoading = false
+          this.beforeClose()
+        })
+      }
     }
   },
   components: {

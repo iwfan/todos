@@ -75,7 +75,7 @@ export default {
 <style lang="stylus" data-role-type="normal" scoped>
 .normal
   .account-wrapper
-    transform: translateY(-100px);
+    transform: translateY(-50px);
     .account-box
       max-width 450px
       padding 0 0 10px
