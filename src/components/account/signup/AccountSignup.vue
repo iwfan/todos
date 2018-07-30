@@ -38,14 +38,14 @@
       v-btn(color="primary" tabindex="-1" flat @click.native.stop="$router.push('/account/signin')") 已有账号？去登录
       v-spacer
       <!--v-btn(@click="resetForm" color="primary") 重置-->
-      v-btn(color="primary" @click="signup" :loading="showLoading") 注册
+      v-btn(color="primary" @click="AccountSignup" :loading="showLoading") 注册
 </template>
 
 <script>
 import rulesMixin from '@/mixin/validateRule'
 import { signUp, hasUser } from '@/leancloudAPI'
 export default {
-  name: 'signup',
+  name: 'AccountSignup.vue',
   data() {
     return {
       valid: false,

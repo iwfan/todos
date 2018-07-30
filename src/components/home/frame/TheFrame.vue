@@ -28,10 +28,10 @@
 
 <script>
 import { findCategories, findTodo, addTodo } from '@/leancloudAPI'
-import header from '../header/header'
-import sidebar from '../sidebar/sidebar'
-import Todos from '../todos/todos'
-import TodoEditor from '../todos/todoEditor'
+import header from '../header/TheHeader'
+import sidebar from '../sidebar/TheSidebar'
+import Todos from '../todos/TodoList'
+import TodoEditor from '../todos/TodoListEditor'
 export default {
   name: 'frame',
   data() {
