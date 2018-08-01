@@ -1,29 +1,59 @@
 <template lang="pug">
   v-app#inspire
     template(v-if="!loading")
-      v-container.app-wrapper(fluid fill-height align-center)
-        v-layout(align-center justify-start column)
+      v-container.app-wrapper(
+        fluid
+        fill-height
+        align-center)
+        v-layout(
+          align-center
+          justify-start
+          column)
           toolbar(@addTodo="addTodoDialog = true")
           v-flex.main-wrapper(fill-height)
-            sidebar(:app-data.sync="appData"
+            sidebar(
+              :app-data.sync="appData"
               @changeFilter="changeFilter"
               @showToast="showToast")
-            todos(:app-data="appData"
+            todos(
+              :app-data="appData"
               :dp-name="dpName"
               :filter-key="filterKey"
               :filter-value="filterValue"
               @showToast="showToast")
-      v-btn(fixed dark fab right bottom color="primary" @click="addTodoDialog = true")
+      v-btn(
+        fixed
+        dark
+        fab
+        right
+        bottom
+        color="primary"
+        @click="addTodoDialog = true")
         v-icon add
-    v-dialog(v-model="loading" persistent width="300")
-      v-card(color="primary" dark)
+    v-dialog(
+      v-model="loading"
+      persistent
+      width="300")
+      v-card(
+        color="primary"
+        dark)
         v-card-text 加载中，请稍候...
-          v-progress-linear(indeterminate color="white" class="mb-0")
-    v-snackbar(v-model="showSnackBar"
-      v-bind:color="type"
-      v-bind:timeout="6000"
-      left bottom v-bind:text="msg") {{ msg }}
-    todo-editor(:visible="addTodoDialog" :on-save="addNewTodo" @close="addTodoDialog = false" @showToast="showToast")
+          v-progress-linear(
+            indeterminate
+            color="white"
+            class="mb-0")
+    v-snackbar(
+      v-model="showSnackBar"
+      :color="type"
+      :timeout="6000"
+      left
+      bottom
+      :text="msg") {{ msg }}
+    todo-editor(
+      :visible="addTodoDialog"
+      :on-save="addNewTodo"
+      @close="addTodoDialog = false"
+      @showToast="showToast")
 </template>
 
 <script>

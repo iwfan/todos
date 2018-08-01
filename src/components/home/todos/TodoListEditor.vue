@@ -1,17 +1,37 @@
 <template lang="pug">
   // hide-overlay
-  v-dialog(content-class="addTodoDialog" v-model="visible" scrollable persistent width="600px")
+  v-dialog(
+    content-class="addTodoDialog"
+    v-model="visible"
+    scrollable
+    persistent
+    width="600px"
+    )
     v-container.elevation-1
       v-layout
         v-flex
-          v-toolbar(dense flat height="40" dark color="grey darken-3")
+          v-toolbar(
+            dense
+            flat
+            height="40"
+            dark
+            color="grey darken-3")
             v-toolbar-title(:style="{'color': '#e3e3e3'}") 添加事项
             v-spacer
-            v-btn(icon small depressed flat @click="beforeClose")
+            v-btn(
+              icon
+              small
+              depressed
+              flat
+              @click="beforeClose")
               v-icon(:style="{'color': '#b3b3b3'}") close
           v-card
             v-card-title
-              input(type=text ref="newTodoTitle" placeholder="标题" v-model.lazy.trim="title")
+              input(
+                type=text
+                ref="newTodoTitle"
+                placeholder="标题"
+                v-model.lazy.trim="title")
             v-card-text
               mavon-editor.editor(
                 v-model="content"
@@ -28,7 +48,10 @@
               v-btn(icon)
                 v-icon(:style="{'color': '#666666'}") event_note
               v-spacer
-              v-btn(color="primary" @click="beforeSave" :loading="saveLoading") 添加
+              v-btn(
+                color="primary"
+                @click="beforeSave"
+                :loading="saveLoading") 添加
 </template>
 
 <script>
@@ -56,11 +79,7 @@ export default {
     return {
       saveLoading: false,
       title: this.todoData.title || '',
-      content: this.todoData.content || `\`code\`
-\`\`\`javascript
-var a = 'hello world'
-\`\`\`
-      `,
+      content: this.todoData.content || '',
       priority: this.todoData.priority || '',
       categories: this.todoData.categories || '',
       toolbar: {
@@ -140,10 +159,21 @@ var a = 'hello world'
           this.beforeClose()
         })
       }
+    },
+    onEscUp(evt) {
+      if (evt.keyCode === 27) {
+        this.beforeClose()
+      }
     }
   },
   components: {
     mavonEditor
+  },
+  mounted() {
+    document.addEventListener('keyup', this.onEscUp)
+  },
+  beforeDestroy() {
+    document.removeEventListener('keyup', this.onEscUp)
   }
 }
 </script>

@@ -5,11 +5,16 @@
         v-layout(align-center justify-center)
           v-flex.account-wrapper
             v-card.account-box
-              v-card-media(:src="mediaImg" height="200px")
-              transition(name="slide-fade" mode="out-in")
+              v-card-media(
+                :src="mediaImg"
+                height="200px")
+              transition(
+                name="slide-fade"
+                mode="out-in")
                 keep-alive
                   router-view(@toast="showToast")
-    v-snackbar(v-model="showSnackBar"
+    v-snackbar(
+      v-model="showSnackBar"
       v-bind:color="type"
       v-bind:timeout="6000"
       left

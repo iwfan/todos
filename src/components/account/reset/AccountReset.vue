@@ -1,8 +1,13 @@
 <template lang="pug">
   v-card.elevation-0.form-wrapper
     v-card-text
-      v-form(ref="form" v-model="valid" lazy-validation @keyup.native.enter="doLogin")
-        v-text-field(v-model="form.email"
+      v-form(
+        ref="form"
+        v-model="valid"
+        lazy-validation
+        @keyup.native.enter="doLogin")
+        v-text-field(
+          v-model="form.email"
           validate-on-blur
           :rules="rules.email"
           prepend-icon="email"
@@ -10,9 +15,16 @@
           label="电子邮箱地址"
           type="text")
     v-card-actions
-      v-btn(color="primary" tabindex="-1" flat @click="$router.push('/account/signin')") 返回登录
+      v-btn(
+        color="primary"
+        tabindex="-1"
+        flat
+        @click="$router.push('/account/signin')") 返回登录
       v-spacer
-      v-btn(color="primary" @click="forgotPass" :loading="showLoading") 重置密码
+      v-btn(
+        color="primary"
+        @click="forgotPass"
+        :loading="showLoading") 重置密码
 </template>
 
 <script>
