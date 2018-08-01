@@ -1,5 +1,5 @@
 <template lang="pug">
-  div(ref="router-wrapper")
+  div(ref="router-wrapper" class="normal")
     router-view
 </template>
 

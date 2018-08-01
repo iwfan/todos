@@ -35,7 +35,7 @@
 import { singUp, hasUser } from '@/leancloudAPI'
 import { ruleMixin } from '@/assets/js/mixin'
 export default {
-  name: 'AccountSignup.vue',
+  name: 'signup',
   data () {
     return {
       loading: false,

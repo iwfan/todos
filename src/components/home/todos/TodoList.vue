@@ -17,6 +17,18 @@
 
 <script>
 import TodoItem from './TodoListItem'
+import Markdownit from 'markdown-it'
+import hljs from 'highlightjs'
+const md = new Markdownit({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value
+      } catch (__) {}
+    }
+    return '' // use external default escaping
+  }
+})
 export default {
   name: 'todos',
   props: {
@@ -57,15 +69,7 @@ export default {
   },
   methods: {
     mark(input) {
-      return window.markdownit({highlight: function (str, lang) {
-        if (lang && window.hljs.getLanguage(lang)) {
-          try {
-            return window.hljs.highlight(lang, str).value
-          } catch (__) {}
-        }
-
-        return '' // use external default escaping
-      }}).render(input)
+      return md.render(input)
     }
   },
   created() {
