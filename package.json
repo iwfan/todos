@@ -11,11 +11,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "highlightjs": "^9.10.0",
     "leancloud-realtime": "^4.0.1",
     "leancloud-storage": "^3.7.3",
     "lodash": "^4.17.10",
-    "markdown-it": "^8.4.2",
     "material-design-icons-iconfont": "^3.0.3",
     "mavon-editor": "^2.6.15",
     "normalize.css": "^8.0.0",

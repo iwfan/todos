@@ -21,15 +21,6 @@
               :filter-key="filterKey"
               :filter-value="filterValue"
               @showToast="showToast")
-      v-btn(
-        fixed
-        dark
-        fab
-        right
-        bottom
-        color="primary"
-        @click="addTodoDialog = true")
-        v-icon add
     v-dialog(
       v-model="loading"
       persistent
@@ -52,6 +43,7 @@
     todo-editor(
       :visible="addTodoDialog"
       :on-save="addNewTodo"
+      :categories="appData.categories"
       @close="addTodoDialog = false"
       @showToast="showToast")
 </template>
@@ -107,9 +99,7 @@ export default {
       addTodo({
         title: data.title,
         content: data.content,
-        priority: data.priority,
-        categories: data.categories,
-        status: 0
+        categories: data.categories
       }).then(data => {
         this.appData.todos.splice(0, 0, data)
       }).catch(e => {

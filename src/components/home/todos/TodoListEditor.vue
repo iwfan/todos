@@ -16,7 +16,7 @@
             height="40"
             dark
             color="grey darken-3")
-            v-toolbar-title(:style="{'color': '#e3e3e3'}") 添加事项
+            v-icon(:style="{'color': '#eee'}") flag
             v-spacer
             v-btn(
               icon
@@ -31,22 +31,66 @@
                 type=text
                 ref="newTodoTitle"
                 placeholder="标题"
-                v-model.lazy.trim="title")
+                v-model.lazy.trim="todoData.title")
+            v-divider
             v-card-text
               mavon-editor.editor(
-                v-model="content"
+                ref="editor"
+                v-model="todoData.content"
                 :subfield="false"
                 placeholder="备注"
-                :editable="true"
-                :box-shadow="false"
-                :toolbars="toolbar")
+                :default-open="editConfig.defaultOpen"
+                :toolbars-flag="false"
+                :box-shadow="false")
             v-card-actions
-              v-btn(icon)
-                v-icon(:style="{'color': '#666666'}") flag
-              v-btn(icon)
-                v-icon(:style="{'color': '#666666'}") priority_high
-              v-btn(icon)
-                v-icon(:style="{'color': '#666666'}") event_note
+              v-tooltip(
+                top
+                v-if="categories"
+                )
+                v-menu(
+                  slot="activator"
+                  bottom
+                  origin="center center"
+                  transition="scale-transition"
+                )
+                  v-btn(icon slot="activator" small)
+                    v-icon(:style="{'color': '#666666'}") flag
+                  v-list(
+                    dense
+                  )
+                    v-list-tile(
+                      v-for="(item, key, index) in categories"
+                      :key="key"
+                      @click="selectedCate = item"
+                    )
+                      v-list-tile-title {{ item.name }}
+                span 分类
+              v-chip(
+                v-if="selectedCate"
+                v-model="showSelectedCate"
+                close
+                small
+                ) {{ selectedCate.name }}
+              //v-tooltip(top)
+                v-menu(
+                  slot="activator"
+                )
+                  v-btn(icon slot="activator")
+                    v-icon(:style="{'color': '#666666'}") priority_high
+                  v-list
+                    v-list-tile(
+                      v-for="(item, index) of ['高', '中', '低', '无']"
+                      v-bind:key="index")
+                      v-list-tile-title {{ item }}
+                span 设置优先级
+              v-tooltip(top)
+                v-btn(
+                  icon
+                  small
+                  slot="activator"
+                  @click="togglePreview")
+                  v-icon(:style="{'color': editConfig.defaultOpen === 'edit' ? '#666666' : '#1976d2'}") remove_red_eye
+                span 预览
               v-spacer
               v-btn(
                 color="primary"
@@ -65,11 +109,9 @@ export default {
       required: true,
       default: false
     },
-    todoData: {
+    categories: {
       type: Object,
-      default() {
-        return {}
-      }
+      default: null
     },
     onSave: {
       type: Function
@@ -78,45 +120,25 @@ export default {
   data() {
     return {
       saveLoading: false,
-      title: this.todoData.title || '',
-      content: this.todoData.content || '',
-      priority: this.todoData.priority || '',
-      categories: this.todoData.categories || '',
-      toolbar: {
-        bold: true, // 粗体
-        italic: true, // 斜体
-        header: false, // 标题
-        underline: true, // 下划线
-        strikethrough: true, // 中划线
-        mark: false, // 标记
-        superscript: false, // 上角标
-        subscript: false, // 下角标
-        quote: true, // 引用
-        ol: true, // 有序列表
-        ul: true, // 无序列表
-        link: false, // 链接
-        imagelink: false, // 图片链接
-        code: true, // code
-        table: true, // 表格
-        fullscreen: false, // 全屏编辑
-        readmodel: false, // 沉浸式阅读
-        htmlcode: false, // 展示html源码
-        help: false, // 帮助
-        /* 1.3.5 */
-        undo: false, // 上一步
-        redo: false, // 下一步
-        trash: true, // 清空
-        save: false, // 保存（触发events中的save事件）
-        /* 1.4.2 */
-        navigation: false, // 导航目录
-        /* 2.1.8 */
-        alignleft: false, // 左对齐
-        aligncenter: false, // 居中
-        alignright: false, // 右对齐
-        /* 2.2.1 */
-        subfield: false, // 单双栏模式
-        preview: true // 预览
+      selectedCate: '',
+      showSelectedCate: true,
+      editConfig: {
+        defaultOpen: 'edit'
+      },
+      todoData: {
+        title: '',
+        content: '',
+        categories: ''
       }
+    }
+  },
+  watch: {
+    showSelectedCate() {
+      this.selectedCate = ''
+    },
+    selectedCate(val) {
+      this.showSelectedCate = true
+      this.todoData.categories = (val && val.id) || ''
     }
   },
   methods: {
@@ -125,23 +147,28 @@ export default {
       return str.replace(/[^\x00-\xff]/g, '__').length
     },
     validate() {
-      const lt = this.getRealLen(this.title)
+      const lt = this.getRealLen(this.todoData.title)
+      if (!lt) {
+        this.$emit('showToast', 'error', '就不知道要填个标题？')
+        return false
+      }
       if (lt > 50) {
         this.$emit('showToast', 'error', '标题太长了呦， 不要超过50个字符。')
         return false
       }
-
-      const lc = this.getRealLen(this.content)
+      const lc = this.getRealLen(this.todoData.content)
       if (lc > 500) {
         this.$emit('showToast', 'error', '内容太长了呦， 不要超过500个字符。')
         return false
       }
-
       return true
     },
     reset() {
-      this.title = ''
-      this.content = ''
+      this.todoData.title = ''
+      this.todoData.content = ''
+      this.editConfig.defaultOpen = 'edit'
+      this.selectedCate = ''
+      this.showSelectedCate = true
     },
     beforeClose() {
       this.reset()
@@ -150,11 +177,7 @@ export default {
     beforeSave() {
       if (this.validate()) {
         this.saveLoading = true
-        this.onSave({
-          title: this.title,
-          content: this.content,
-          priority: 0
-        }).then(() => {
+        this.onSave(this.todoData).then(() => {
           this.saveLoading = false
           this.beforeClose()
         })
@@ -163,6 +186,13 @@ export default {
     onEscUp(evt) {
       if (evt.keyCode === 27) {
         this.beforeClose()
+      }
+    },
+    togglePreview() {
+      if (this.editConfig.defaultOpen === 'edit') {
+        this.editConfig.defaultOpen = 'preview'
+      } else {
+        this.editConfig.defaultOpen = 'edit'
       }
     }
   },
@@ -186,6 +216,10 @@ export default {
   color #24292e
   box-shadow none
   font-weight: normal
+.v-note-wrapper .v-note-panel .v-note-edit.divarea-wrapper .content-input-wrapper
+  padding 8px 20px 15px 20px !important
+.v-note-wrapper .v-note-panel
+  border: none !important
 </style>
 
 <style lang="stylus" scoped>
@@ -198,8 +232,9 @@ export default {
       font-size 14px
     .v-card
       .v-card__title
-        padding 0 20px
+        padding 0
         input
+          padding 0 20px
           width 100%
           height: 40px
           font-size 17px
@@ -214,4 +249,6 @@ export default {
           height 100%
       .v-card__actions
         padding 10px 20px
+        .v-tooltip
+          margin 0 3px
 </style>

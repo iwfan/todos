@@ -49,7 +49,7 @@ export async function addTodo({
       content: unescape(t.get('content')),
       status: t.get('status'),
       priority: t.get('priority'),
-      categories: t.get('categories')
+      categories: t.get('categories') ? t.get('categories').id : 'all'
     }
   } catch (exception) {
     throw getErrorMessage(exception)

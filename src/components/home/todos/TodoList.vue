@@ -9,26 +9,20 @@
               v-expansion-panel-content(v-for="(item, index) in todosData" :key="item.id" expand-icon="menu-down")
                 div(slot="header")
                   v-checkbox(:label="item.title")
+                  <!--span(v-html="mark(item.title)")-->
                 v-card
-                  v-card-text.markdown-body(v-html="mark(item.content)")
+                  v-card-text.markdown-body(
+                    :style="{'fontSize': '15px'}"
+                    v-html="mark(item.content)")
         template(v-else)
           v-alert(:value="true" type="info" outline) 干净的像你的脑子一样
 </template>
 
 <script>
 import TodoItem from './TodoListItem'
-import Markdownit from 'markdown-it'
-import hljs from 'highlightjs'
-const md = new Markdownit({
-  highlight: function (str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(lang, str).value
-      } catch (__) {}
-    }
-    return '' // use external default escaping
-  }
-})
+import { mavonEditor } from 'mavon-editor'
+const md = mavonEditor.getMarkdownIt()
+
 export default {
   name: 'todos',
   props: {
