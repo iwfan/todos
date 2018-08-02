@@ -1,37 +1,59 @@
 <template lang="pug">
   v-app#inspire
     template(v-if="!loading")
-      v-container.app-wrapper(fluid fill-height align-center)
-        v-layout(align-center justify-start column)
+      v-container.app-wrapper(
+        fluid
+        fill-height
+        align-center)
+        v-layout(
+          align-center
+          justify-start
+          column)
           toolbar(@addTodo="addTodoDialog = true")
           v-flex.main-wrapper(fill-height)
-            sidebar(:app-data.sync="appData"
+            sidebar(
+              :app-data.sync="appData"
               @changeFilter="changeFilter"
               @showToast="showToast")
-            todos(:app-data="appData"
+            todos(
+              :app-data="appData"
               :dp-name="dpName"
               :filter-key="filterKey"
               :filter-value="filterValue"
               @showToast="showToast")
-      v-btn(fixed dark fab right bottom color="primary" @click="addTodoDialog = true")
-        v-icon add
-    v-dialog(v-model="loading" persistent width="300")
-      v-card(color="primary" dark)
+    v-dialog(
+      v-model="loading"
+      persistent
+      width="300")
+      v-card(
+        color="primary"
+        dark)
         v-card-text 加载中，请稍候...
-          v-progress-linear(indeterminate color="white" class="mb-0")
-    v-snackbar(v-model="showSnackBar"
-      v-bind:color="type"
-      v-bind:timeout="6000"
-      left bottom v-bind:text="msg") {{ msg }}
-    todo-editor(:visible="addTodoDialog" :on-save="addNewTodo" v-on:close="addTodoDialog = false" )
+          v-progress-linear(
+            indeterminate
+            color="white"
+            class="mb-0")
+    v-snackbar(
+      v-model="showSnackBar"
+      :color="type"
+      :timeout="6000"
+      left
+      bottom
+      :text="msg") {{ msg }}
+    todo-editor(
+      :visible="addTodoDialog"
+      :on-save="addNewTodo"
+      :categories="appData.categories"
+      @close="addTodoDialog = false"
+      @showToast="showToast")
 </template>
 
 <script>
-import { findCategories, findTodo } from '@/leancloudAPI'
-import header from '../header/header'
-import sidebar from '../sidebar/sidebar'
-import Todos from '../todos/todos'
-import TodoEditor from '../todos/todoEditor'
+import { findCategories, findTodo, addTodo } from '@/leancloudAPI'
+import header from '../header/TheHeader'
+import sidebar from '../sidebar/TheSidebar'
+import Todos from '../todos/TodoList'
+import TodoEditor from '../todos/TodoListEditor'
 export default {
   name: 'frame',
   data() {
@@ -73,8 +95,16 @@ export default {
       this.filterKey = key
       this.filterValue = value
     },
-    addNewTodo(data) {
-      console.log(data)
+    async addNewTodo(data) {
+      addTodo({
+        title: data.title,
+        content: data.content,
+        categories: data.categories
+      }).then(data => {
+        this.appData.todos.splice(0, 0, data)
+      }).catch(e => {
+        this.showToast('error', e)
+      })
     }
   },
   components: {

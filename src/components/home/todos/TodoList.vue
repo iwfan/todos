@@ -9,14 +9,20 @@
               v-expansion-panel-content(v-for="(item, index) in todosData" :key="item.id" expand-icon="menu-down")
                 div(slot="header")
                   v-checkbox(:label="item.title")
+                  <!--span(v-html="mark(item.title)")-->
                 v-card
-                  v-card-text Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ali
+                  v-card-text.markdown-body(
+                    :style="{'fontSize': '15px'}"
+                    v-html="mark(item.content)")
         template(v-else)
           v-alert(:value="true" type="info" outline) 干净的像你的脑子一样
 </template>
 
 <script>
-import TodoItem from './todoItem'
+import TodoItem from './TodoListItem'
+import { mavonEditor } from 'mavon-editor'
+const md = mavonEditor.getMarkdownIt()
+
 export default {
   name: 'todos',
   props: {
@@ -47,7 +53,6 @@ export default {
   },
   computed: {
     todosData () {
-      // debugger
       return [].filter.call(this.appData.todos, item => {
         if (this.filterKey) {
           return item[this.filterKey] === this.filterValue
@@ -57,6 +62,9 @@ export default {
     }
   },
   methods: {
+    mark(input) {
+      return md.render(input)
+    }
   },
   created() {
   },
@@ -65,6 +73,17 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+  .v-card__text code
+    display: inline
+    color #24292e
+    box-shadow none
+    font-weight: normal
+    background-color rgba(27,31,35,.05)
+  .v-card__text p
+    margin 0
+</style>
 
 <style lang="stylus" scoped>
 .todos-wrapper

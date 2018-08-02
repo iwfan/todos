@@ -15,7 +15,7 @@ const router = new Router({
        *  Remove the name from this route and use the name of the default child route for named links instead.
        */
       // name: 'account',
-      component: () => import('@/components/account/account'),
+      component: () => import('@/components/account/TheAccount'),
       meta: {
         title: '登录'
       },
@@ -27,7 +27,7 @@ const router = new Router({
         {
           path: 'signin',
           name: 'signin',
-          component: () => import('@/components/account/signin/signin'),
+          component: () => import('@/components/account/signin/AccountSignin'),
           meta: {
             title: '登录'
           }
@@ -35,7 +35,7 @@ const router = new Router({
         {
           path: 'signup',
           name: 'signup',
-          component: () => import('@/components/account/signup/signup'),
+          component: () => import('@/components/account/signup/AccountSignup'),
           meta: {
             title: '注册'
           }
@@ -43,7 +43,7 @@ const router = new Router({
         {
           path: 'reset',
           name: 'reset',
-          component: () => import('@/components/account/reset/reset'),
+          component: () => import('@/components/account/reset/AccountReset'),
           meta: {
             title: '重置密码'
           }
@@ -53,7 +53,7 @@ const router = new Router({
     {
       path: '/index',
       name: 'index',
-      component: () => import('@/components/home/frame/frame'),
+      component: () => import('@/components/home/frame/TheFrame'),
       meta: {
         title: 'todos-更好的管理你的代办事项'
       }

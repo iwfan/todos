@@ -1,15 +1,21 @@
 <template lang="pug">
   v-card.elevation-0.form-wrapper
     v-card-text
-      v-form(ref="form" v-model="valid" lazy-validation @keyup.native.enter="doLogin")
-        v-text-field(v-model="form.username"
+      v-form(
+        ref="form"
+        v-model="valid"
+        lazy-validation
+        @keyup.native.enter="doLogin")
+        v-text-field(
+          v-model="form.username"
           validate-on-blur
           :rules="rules.username"
           prepend-icon="person"
           name="username"
           label="登录名"
           type="text")
-        v-text-field(v-model="form.password"
+        v-text-field(
+          v-model="form.password"
           validate-on-blur
           :rules="rules.password"
           prepend-icon="lock"
@@ -19,14 +25,16 @@
           :type="showpasswd ? 'text' : 'password'"
           :append-icon="showpasswd ? 'visibility' : 'visibility_off'"
           v-on:click:append="showpasswd = !showpasswd")
-        v-text-field(v-model="form.email"
+        v-text-field(
+          v-model="form.email"
           validate-on-blur
           :rules="rules.email"
           prepend-icon="email"
           name="email"
           label="电子邮箱地址"
           type="text")
-        v-text-field(v-model="form.invitcode"
+        v-text-field(
+          v-model="form.invitcode"
           validate-on-blur
           :rules="rules.invitcode"
           prepend-icon="card_giftcard"
@@ -35,10 +43,17 @@
           :loading="showLoading2"
           type="text")
     v-card-actions
-      v-btn(color="primary" tabindex="-1" flat @click.native.stop="$router.push('/account/signin')") 已有账号？去登录
+      v-btn(
+        color="primary"
+        tabindex="-1"
+        flat
+        @click.native.stop="$router.push('/account/signin')") 已有账号？去登录
       v-spacer
       <!--v-btn(@click="resetForm" color="primary") 重置-->
-      v-btn(color="primary" @click="signup" :loading="showLoading") 注册
+      v-btn(
+        color="primary"
+        @click="signup"
+        :loading="showLoading") 注册
 </template>
 
 <script>
