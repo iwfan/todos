@@ -10,21 +10,24 @@
           icon
           dark
           flat
-          :color="item.hover ? 'green' : 'grey'"
+          :color="item.hover ? 'green' : 'grey lighten-2'"
           v-on:click.stop="item.status = 1")
-          v-icon() done
-        span {{ item.title }} {{ item.id }}
+          v-icon() check_circle
+        span.todo-title {{ item.title }}
+        span.todo-control
+          v-btn(icon)
+            v-icon() edit
       template(v-else)
         v-btn(
           icon
           flat
-          :color="item.hover ? 'red' : 'grey'"
+          color="green"
+          v-on:click.stop="item.status = 0"
         )
-          v-icon delete_sweep
+          v-icon done
         del {{ item.title }}
     v-card(v-if="item.content")
       v-card-text.markdown-body(
-      v-bind:style="{'fontSize': '15px'}"
       v-html="renderMarkdown(item.content)")
 </template>
 
@@ -72,8 +75,16 @@ export default {
     margin 0
   .v-expansion-panel__header
     padding 10px 24px 10px 0px
+  .v-card__text.markdown-body
+    font-size 15px
+    padding 5px 16px 16px 16px
 </style>
 
 <style lang="stylus" scoped>
-
+.todo-title
+  font-weight: 600
+  line-height 48px
+  vertical-align middle
+.todo-control
+  float: right
 </style>
