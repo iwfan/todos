@@ -16,7 +16,7 @@
             height="40"
             dark
             color="grey darken-3")
-            v-icon(:style="{'color': '#eee'}") flag
+            v-icon(v-bind:style="{'color': '#eee'}") flag
             v-spacer
             v-btn(
               icon
@@ -24,7 +24,7 @@
               depressed
               flat
               @click="beforeClose")
-              v-icon(:style="{'color': '#b3b3b3'}") close
+              v-icon(v-bind:style="{'color': '#b3b3b3'}") close
           v-card
             v-card-title
               input(
@@ -37,11 +37,11 @@
               mavon-editor.editor(
                 ref="editor"
                 v-model="todoData.content"
-                :subfield="false"
+                v-bind:subfield="false"
                 placeholder="备注"
-                :default-open="editConfig.defaultOpen"
-                :toolbars-flag="false"
-                :box-shadow="false")
+                v-bind:default-open="editConfig.defaultOpen"
+                v-bind:toolbars-flag="false"
+                v-bind:box-shadow="false")
             v-card-actions
               v-tooltip(
                 top
@@ -54,14 +54,14 @@
                   transition="scale-transition"
                 )
                   v-btn(icon slot="activator" small)
-                    v-icon(:style="{'color': '#666666'}") flag
+                    v-icon(v-bind:style="{'color': '#666666'}") flag
                   v-list(
                     dense
                   )
                     v-list-tile(
                       v-for="(item, key, index) in categories"
-                      :key="key"
-                      @click="selectedCate = item"
+                      v-bind:key="key"
+                      v-on:click="selectedCate = item"
                     )
                       v-list-tile-title {{ item.name }}
                 span 分类
@@ -88,14 +88,14 @@
                   icon
                   small
                   slot="activator"
-                  @click="togglePreview")
+                  v-on:click="togglePreview")
                   v-icon(:style="{'color': editConfig.defaultOpen === 'edit' ? '#666666' : '#1976d2'}") remove_red_eye
                 span 预览
               v-spacer
               v-btn(
                 color="primary"
-                @click="beforeSave"
-                :loading="saveLoading") 添加
+                v-on:click="beforeSave"
+                v-bind:loading="saveLoading") 添加
 </template>
 
 <script>

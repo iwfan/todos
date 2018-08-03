@@ -97,7 +97,7 @@ export async function findTodo({
     }
     query.equalTo('owner', getCurrentUser())
     query.select(['title', 'content', 'status', 'priority', 'categories'])
-    query.descending('createdAt')
+    query.ascending('createdAt')
     query.limit(999)
     const todos = await query.find()
     return [].reduce.call(todos, (prev, curr, index, arr) => {
