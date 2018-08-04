@@ -6,9 +6,9 @@
       v-list(dense)
         v-list-tile(
           ripple
-          @click="changeMenu('all', '全部事项')"
+          v-on:click="changeMenu('all', '全部事项')"
           color="grey darken-1"
-          :class="{'activeMenu': activeMenu === 'all'}")
+          v-bind:class="{'activeMenu': activeMenu === 'all'}")
           v-list-tile-action
             v-icon(color="primary") archive
           v-list-tile-content
@@ -16,45 +16,53 @@
         v-list-tile(
           color="grey darken-1"
           ripple
-          @click="changeMenu('done', '已完成', 'status', '1')"
-          :class="{'activeMenu': activeMenu === 'done'}")
+          v-on:click="changeMenu('done', '已完成', 'status', 1)"
+          v-bind:class="{'activeMenu': activeMenu === 'done'}")
           v-list-tile-action
             v-icon(color="green") check
           v-list-tile-content
             v-list-tile-title 已完成
-        v-list-tile(
+        //v-list-tile(
           ripple
           color="grey darken-1"
-          @click="changeMenu('trash', '已删除', 'status', '2')"
-          :class="{'activeMenu': activeMenu === 'trash'}")
+          v-on:click="changeMenu('trash', '已删除', 'status', 2)"
+          v-bind:class="{'activeMenu': activeMenu === 'trash'}")
           v-list-tile-action
             v-icon(color="red") delete
           v-list-tile-content
             v-list-tile-title 已删除
         template(v-if="categories")
-          v-divider(v-if="!cateMenuActive" v-bind:style="{'marginBottom': '-1px'}")
-          v-list-group(v-model="cateMenuActive" prepend-icon="flag" append-icon="")
-            v-layout(row align-center slot="activator")
+          v-divider(
+            v-if="!cateMenuActive"
+            v-bind:style="{'marginBottom': '-1px'}")
+          v-list-group(
+            v-model="cateMenuActive"
+            prepend-icon="flag"
+            append-icon="")
+            v-layout(
+              row
+              align-center
+              slot="activator")
                 v-flex
                   v-subheader 分类
                 v-flex(class="text-xs-right")
-                  v-btn(small flat icon @click.stop="showAddCateDialog = true")
-                    v-icon(:style="{'fontSize': '22px', 'color': 'rgba(0, 0, 0, .54)'}") playlist_add
-            v-list-tile(ripple v-for="(cate, index) in categories" :key="cate.id"
+                  v-btn(small flat icon v-on:click.stop="showAddCateDialog = true")
+                    v-icon(v-bind:style="{'fontSize': '22px', 'color': 'rgba(0, 0, 0, .54)'}") playlist_add
+            v-list-tile(ripple v-for="(cate, index) in categories" v-bind:key="cate.id"
               color="grey darken-1"
-              @click="changeMenu(cate.id, cate.name, 'categories', cate.id)"
-              :class="{'activeMenu': activeMenu === cate.id}"
-              @mouseenter.native="cate.active = true"
-              @mouseleave.native="cate.active = false")
+              v-on:click="changeMenu(cate.id, cate.name, 'categories', cate.id)"
+              v-bind:class="{'activeMenu': activeMenu === cate.id}"
+              v-on:mouseenter.native="cate.active = true"
+              v-on:mouseleave.native="cate.active = false")
               v-list-tile-content
                 v-list-tile-title.pl-3 {{ cate.name }}
               v-list-tile-action(v-if="cate.active")
                 v-btn(flat small icon color="red"
-                  :loading="cate.removeLoading"
-                  @click.native.stop="removeCate(cate.id, index)")
+                  v-bind:loading="cate.removeLoading"
+                  v-on:click.native.stop="removeCate(cate.id, index)")
                   v-icon delete_sweep
     v-dialog(v-model="showAddCateDialog" persistent max-width="400"
-      @keyup.native.enter.prevent="addCate")
+      v-on:keyup.native.enter.prevent="addCate")
       v-card
         v-card-title 添加新分类
         v-card-text
@@ -65,28 +73,28 @@
             autofocus
             required
             counter="15"
-            :rules = "[\
+            v-bind:rules = "[\
               f => !!f || '不能为空',\
               f => !!f && f.length < 15 || '超出长度了呦'\
             ]"
             prepend-icon="widgets"
             validate-on-blur
             type="text"
-            @keyup.native.enter.prevent="addCate")
+            v-on:keyup.native.enter.prevent="addCate")
         v-card-actions
           v-spacer
           v-btn(color="grey darken-1" flat @click="cancaleAddCate") 取消
-          v-btn(color="blue darken-1" flat :loading="addCateLoading" @click="addCate") 添加
+          v-btn(color="blue darken-1" flat :loading="addCateLoading" v-on:click="addCate") 添加
     v-dialog(v-model="deleteCateDialog" persistent max-width="400")
       v-card
         v-card-title 删除
         v-card-text 确定删除该分类吗？(该分类下的数据都将移入全部事项中)
         v-card-actions
           v-spacer
-          v-btn(flat color="green darken-1" @click.native="deleteCateDialog = false") 取消
+          v-btn(flat color="green darken-1" v-on:click.native="deleteCateDialog = false") 取消
           v-btn(flat color="red darken-1"
-            @keyup.native.enter="deleteCate"
-            @click.native="deleteCate" :loading="deleteLoading") 删除
+            v-on:keyup.native.enter="deleteCate"
+            v-on:click.native="deleteCate" v-bind:loading="deleteLoading") 删除
 </template>
 
 <script>

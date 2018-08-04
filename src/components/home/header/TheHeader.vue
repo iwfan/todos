@@ -9,7 +9,7 @@
           v-btn(icon slot="activator" @click="$emit('addTodo')")
             v-icon add
           span 添加事项
-        v-tooltip(bottom)
+        //v-tooltip(bottom)
           v-btn(icon slot="activator")
             v-icon search
           span 搜索
