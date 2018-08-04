@@ -1,8 +1,7 @@
-import { AV, getErrorMessage, TODO, Todo, TODOTAG, TodoTag, CATEGORIES } from './base'
+import { AV, getErrorMessage, TODO, Todo, CATEGORIES } from './base'
 import { getCurrentUser } from './User'
 import escape from 'lodash/fp/escape'
 import unescape from 'lodash/fp/unescape'
-console.log(TODOTAG, TodoTag)
 export async function addTodo({
   title,
   content,
@@ -56,20 +55,48 @@ export async function addTodo({
   }
 }
 
-export async function updateTodo() {
-  // try {
-
-  // } catch (exception) {
-  //   throw getErrorMessage(exception)
-  // }
+export async function updateTodo(id, param) {
+  try {
+    const todo = AV.Object.createWithoutData(TODO, id)
+    if (param.title) {
+      todo.set('title', escape(param.title))
+    }
+    if (param.content) {
+      todo.set('content', escape(param.content))
+    }
+    if (param.status) {
+      todo.set('status', param.status)
+    }
+    if (Object.hasOwnProperty.call(param, 'categories')) {
+      const { categories } = param
+      if (categories) {
+        const cate = AV.Object.createWithoutData(CATEGORIES, categories)
+        todo.set('categories', cate)
+      } else {
+        todo.set('categories', AV.Object.createWithoutData(CATEGORIES, 'all'))
+      }
+    }
+    const t = await todo.save()
+    return {
+      id: t.id,
+      title: unescape(t.get('title')),
+      content: unescape(t.get('content')),
+      status: t.get('status'),
+      priority: t.get('priority'),
+      categories: t.get('categories') ? t.get('categories').id : 'all'
+    }
+  } catch (exception) {
+    throw getErrorMessage(exception)
+  }
 }
 
-export async function deleteTodo() {
-  // try {
-
-  // } catch (exception) {
-  //   throw getErrorMessage(exception)
-  // }
+export async function deleteTodo(id) {
+  try {
+    const todo = AV.Object.createWithoutData(TODO, id)
+    await todo.destroy()
+  } catch (exception) {
+    throw getErrorMessage(exception)
+  }
 }
 
 export async function findTodo({

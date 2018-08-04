@@ -152,13 +152,13 @@ export default {
         this.$emit('showToast', 'error', '就不知道要填个标题？')
         return false
       }
-      if (lt > 50) {
-        this.$emit('showToast', 'error', '标题太长了呦， 不要超过50个字符。')
+      if (lt > 200) {
+        this.$emit('showToast', 'error', '标题太长了呦， 不要超过200个字符。')
         return false
       }
       const lc = this.getRealLen(this.todoData.content)
-      if (lc > 500) {
-        this.$emit('showToast', 'error', '内容太长了呦， 不要超过500个字符。')
+      if (lc > 2000) {
+        this.$emit('showToast', 'error', '内容太长了呦， 不要超过2000个字符。')
         return false
       }
       return true

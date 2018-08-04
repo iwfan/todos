@@ -1,37 +1,46 @@
 <template lang="pug">
   v-expansion-panel-content(
     :hide-actions="!item.content"
+    expand-icon="arrow_drop_down"
     readonly=false
+    v-bind:style="{position: 'relative'}"
     v-on:mouseenter.native="mouseEnter(item)"
     v-on:mouseleave.native="mouseLeave(item)")
-    div(slot="header" )
+    div(slot="header")
       template(v-if="item.status === 0")
         v-btn(
           icon
           dark
           flat
-          :color="item.hover ? 'green' : 'grey lighten-2'"
-          v-on:click.stop="item.status = 1")
+          :loading="item.checkLoading"
+          v-bind:color="item.hover ? 'green' : 'grey lighten-2'"
+          v-on:click.stop="changeStatus(item.id, 1)")
           v-icon() check_circle
-        span.todo-title {{ item.title }}
-        span.todo-control
-          v-btn(icon)
+        span.todo-title(v-bind:title="item.title") {{ item.title }}
+        span.todo-control(v-if="item.hover" v-bind:key="item.id+'undone'")
+          v-btn(icon flat color="primary" v-on:click.stop="editItem(item.id)")
             v-icon() edit
+          v-btn(icon flat color="red" v-on:click.stop="changeStatus(item.id, 2)")
+            v-icon delete_sweep
       template(v-else)
         v-btn(
           icon
           flat
           color="green"
-          v-on:click.stop="item.status = 0"
+          v-on:click.stop="changeStatus(item.id, 0)"
         )
           v-icon done
-        del {{ item.title }}
+        del.todo-title(v-bind:title="item.title") {{ item.title }}
+        span.todo-control(v-if="item.hover" v-bind:key="item.id+'done'")
+          v-btn(icon flat color="red" v-on:click.stop="changeStatus(item.id, 2)")
+            v-icon delete_sweep
     v-card(v-if="item.content")
       v-card-text.markdown-body(
       v-html="renderMarkdown(item.content)")
 </template>
 
 <script>
+import { updateTodo } from '@/leancloudAPI'
 import { mavonEditor } from 'mavon-editor'
 const markdownIt = mavonEditor.getMarkdownIt()
 export default {
@@ -44,7 +53,7 @@ export default {
   },
   data() {
     return {
-      item: Object.assign({}, this.todo, { showDetail: false, hover: false })
+      item: Object.assign({}, this.todo, { checkLoading: false, removeLoading: false, hover: false })
     }
   },
   methods: {
@@ -56,6 +65,24 @@ export default {
     },
     mouseLeave(item) {
       item.hover = false
+    },
+    changeStatus(id, status) {
+      console.log(status)
+      this.item.checkLoading = true
+      updateTodo(id, { status })
+        .then(() => {
+          this.todo.status = status
+          this.item.status = status
+        })
+        .catch((e) => {
+          this.$emit('showToast', 'error', e)
+        })
+        .finally(() => {
+          this.item.checkLoading = false
+        })
+    },
+    editItem(id) {
+      console.log('edit', id)
     }
   },
   mounted() {
@@ -82,9 +109,17 @@ export default {
 
 <style lang="stylus" scoped>
 .todo-title
+  display inline-block
+  width: 70%
+  max-width 600px
+  height: 48px
   font-weight: 600
   line-height 48px
+  overflow hidden
   vertical-align middle
+  text-overflow: ellipsis
+  white-space: nowrap
 .todo-control
-  float: right
+  position absolute
+  right: 50px
 </style>

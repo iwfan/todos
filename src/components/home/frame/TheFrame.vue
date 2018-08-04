@@ -16,7 +16,7 @@
               @changeFilter="changeFilter"
               @showToast="showToast")
             todos(
-              :app-data="appData"
+              :app-data.sync="appData"
               :dp-name="dpName"
               :filter-key="filterKey"
               :filter-value="filterValue"
@@ -86,6 +86,7 @@ export default {
   mounted() {},
   methods: {
     showToast(type, msg) {
+      console.log(arguments)
       this.showSnackBar = true
       this.type = type
       this.msg = msg
