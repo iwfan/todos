@@ -16,7 +16,8 @@
               v-bind:key="item.id"
               v-bind:todo.sync="item"
               v-on:showToast="showToast"
-              v-on:remove="beforeRemoveTodo")
+              v-on:remove="beforeRemoveTodo"
+              v-on:edit="$emit('editTodo', $event)")
         template(v-else)
           v-alert(
             v-bind:value="true"

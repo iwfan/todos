@@ -18,7 +18,7 @@
           v-icon() check_circle
         span.todo-title(v-bind:title="item.title") {{ item.title }}
         span.todo-control(v-if="item.hover" v-bind:key="item.id+'undone'")
-          v-btn(icon flat color="primary" v-on:click.stop="editItem(item.id)")
+          //v-btn(icon flat color="primary" v-on:click.stop="$emit('edit', item.id)")
             v-icon() edit
           v-btn(icon flat color="red" v-on:click.stop="$emit('remove', item.id)")
             v-icon delete
@@ -78,13 +78,7 @@ export default {
         .finally(() => {
           this.item.checkLoading = false
         })
-    },
-    editItem(id) {
-      console.log('edit', id)
     }
-  },
-  mounted() {
-    // console.log(this.todo)
   }
 }
 </script>

@@ -45,7 +45,7 @@
             v-card-actions
               v-tooltip(
                 top
-                v-if="categories"
+                v-if="categoriesData"
                 )
                 v-menu(
                   slot="activator"
@@ -59,7 +59,7 @@
                     dense
                   )
                     v-list-tile(
-                      v-for="(item, key, index) in categories"
+                      v-for="(item, key, index) in categoriesData"
                       v-bind:key="key"
                       v-on:click="selectedCate = item"
                     )
@@ -109,26 +109,35 @@ export default {
       required: true,
       default: false
     },
-    categories: {
+    categoriesData: {
       type: Object,
       default: null
     },
     onSave: {
       type: Function
+    },
+    title: {
+      type: String
+    },
+    content: {
+      type: String
+    },
+    categories: {
+      type: String
     }
   },
   data() {
     return {
       saveLoading: false,
-      selectedCate: '',
+      selectedCate: this.categories || '',
       showSelectedCate: true,
       editConfig: {
         defaultOpen: 'edit'
       },
       todoData: {
-        title: '',
-        content: '',
-        categories: ''
+        title: this.title || '',
+        content: this.content || '',
+        categories: this.categories || ''
       }
     }
   },
