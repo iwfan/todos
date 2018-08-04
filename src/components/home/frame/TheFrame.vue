@@ -75,7 +75,7 @@ export default {
   created() {
     Promise.all([findCategories(), findTodo()]).then(data => {
       this.appData.categories = data[0]
-      this.appData.todos = data[1]
+      this.appData.todos = [].sort.call(data[1], (a, b) => a.status > b.status)
       console.log(this.appData)
     }).catch(e => {
       this.showToast('error', (e.rawMessage) || (e.message) || e)
@@ -102,7 +102,8 @@ export default {
         content: data.content,
         categories: data.categories
       }).then(data => {
-        this.appData.todos.splice(0, 0, data)
+        this.appData.todos.push(data)
+        this.appData.todos.sort((a, b) => a.status > b.status)
       }).catch(e => {
         this.showToast('error', e)
       })

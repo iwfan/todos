@@ -20,20 +20,19 @@
         span.todo-control(v-if="item.hover" v-bind:key="item.id+'undone'")
           v-btn(icon flat color="primary" v-on:click.stop="editItem(item.id)")
             v-icon() edit
-          v-btn(icon flat color="red" v-on:click.stop="changeStatus(item.id, 2)")
-            v-icon delete_sweep
+          v-btn(icon flat color="red" v-on:click.stop="$emit('remove', item.id)")
+            v-icon delete
       template(v-else)
         v-btn(
           icon
           flat
           color="green"
-          v-on:click.stop="changeStatus(item.id, 0)"
-        )
+          v-on:click.stop="changeStatus(item.id, 0)")
           v-icon done
         del.todo-title(v-bind:title="item.title") {{ item.title }}
         span.todo-control(v-if="item.hover" v-bind:key="item.id+'done'")
-          v-btn(icon flat color="red" v-on:click.stop="changeStatus(item.id, 2)")
-            v-icon delete_sweep
+          v-btn(icon flat color="red" v-on:click.stop="$emit('remove', item.id)")
+            v-icon delete
     v-card(v-if="item.content")
       v-card-text.markdown-body(
       v-html="renderMarkdown(item.content)")
@@ -67,7 +66,6 @@ export default {
       item.hover = false
     },
     changeStatus(id, status) {
-      console.log(status)
       this.item.checkLoading = true
       updateTodo(id, { status })
         .then(() => {

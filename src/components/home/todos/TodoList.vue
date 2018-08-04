@@ -15,7 +15,8 @@
               v-for="(item, index) in todosData"
               v-bind:key="item.id"
               v-bind:todo.sync="item"
-              v-on:showToast="showToast")
+              v-on:showToast="showToast"
+              v-on:remove="beforeRemoveTodo")
         template(v-else)
           v-alert(
             v-bind:value="true"
@@ -27,13 +28,14 @@
         v-card-text 确定删除吗？ (该条数据会移入已删除中)
         v-card-actions
           v-spacer
-          v-btn(flat color="green darken-1" v-on:click.native="deleteTodoDialog = false") 取消
+          v-btn(flat color="green darken-1" v-on:click.native="cancelRemoveTodo") 取消
           v-btn(flat color="red darken-1"
-            v-on:keyup.native.enter="deleteCate"
-            v-on:click.native="deleteCate" v-bind:loading="deleteLoading") 删除
+            v-on:keyup.native.enter="removeTodo"
+            v-on:click.native="removeTodo" v-bind:loading="deleteLoading") 删除
 </template>
 
 <script>
+import { deleteTodo } from '@/leancloudAPI'
 import TodoItem from './TodoListItem'
 export default {
   name: 'todos',
@@ -53,7 +55,7 @@ export default {
       default: ''
     },
     filterValue: {
-      type: String,
+      type: [String, Number],
       required: true,
       default: ''
     }
@@ -61,6 +63,8 @@ export default {
   data() {
     return {
       deleteTodoDialog: false,
+      deleteLoading: false,
+      willDeleteTodo: null,
       categories: this.appData.categories
     }
   },
@@ -77,6 +81,29 @@ export default {
   methods: {
     showToast(type, msg) {
       this.$emit('showToast', type, msg)
+    },
+    beforeRemoveTodo(id) {
+      this.willDeleteTodo = id
+      this.deleteTodoDialog = true
+    },
+    cancelRemoveTodo() {
+      this.willDeleteTodo = null
+      this.deleteTodoDialog = false
+    },
+    removeTodo() {
+      this.deleteLoading = true
+      deleteTodo(this.willDeleteTodo)
+        .then(() => {
+          this.appData.todos = this.appData.todos.filter((item) => item.id !== this.willDeleteTodo)
+        })
+        .catch((e) => {
+          this.showToast('error', e)
+        })
+        .finally(() => {
+          this.willDeleteTodo = null
+          this.deleteLoading = false
+          this.deleteTodoDialog = false
+        })
     }
   },
   components: {

@@ -64,7 +64,7 @@ export async function updateTodo(id, param) {
     if (param.content) {
       todo.set('content', escape(param.content))
     }
-    if (param.status) {
+    if (Object.hasOwnProperty.call(param, 'status')) {
       todo.set('status', param.status)
     }
     if (Object.hasOwnProperty.call(param, 'categories')) {

@@ -16,16 +16,16 @@
         v-list-tile(
           color="grey darken-1"
           ripple
-          v-on:click="changeMenu('done', '已完成', 'status', '1')"
+          v-on:click="changeMenu('done', '已完成', 'status', 1)"
           v-bind:class="{'activeMenu': activeMenu === 'done'}")
           v-list-tile-action
             v-icon(color="green") check
           v-list-tile-content
             v-list-tile-title 已完成
-        v-list-tile(
+        //v-list-tile(
           ripple
           color="grey darken-1"
-          v-on:click="changeMenu('trash', '已删除', 'status', '2')"
+          v-on:click="changeMenu('trash', '已删除', 'status', 2)"
           v-bind:class="{'activeMenu': activeMenu === 'trash'}")
           v-list-tile-action
             v-icon(color="red") delete
